@@ -1,0 +1,15 @@
+PODS:
+  - JSONKit (1.5pre)
+  - SDWebImage (3.7.1):
+    - SDWebImage/Core
+  - SDWebImage/Core (3.7.1)
+
+DEPENDENCIES:
+  - JSONKit (~> 1.5pre)
+  - SDWebImage (~> 3.7.1)
+
+SPEC CHECKSUMS:
+  JSONKit: efef3bbd3372ff33f96b9c6f34cf4fe18e74ab69
+  SDWebImage: 116e88633b5b416ea0ca4b334a4ac59cf72dd38d
+
+COCOAPODS: 0.34.4

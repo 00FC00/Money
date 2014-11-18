@@ -1,0 +1,41 @@
+﻿//
+//  PartnerConfig.h
+//  AlipaySdkDemo
+//
+//  Created by ChaoGanYing on 13-5-3.
+//  Copyright (c) 2013年 RenFei. All rights reserved.
+//
+
+#ifndef MQPDemo_PartnerConfig_h
+#define MQPDemo_PartnerConfig_h
+
+////合作商户ID。用签约支付宝账号登录ms.alipay.com后，在账户信息页面获取。
+//#define PartnerID @"2088111491235432"
+////账户ID。用签约支付宝账号登录ms.alipay.com后，在账户信息页面获取。
+////#define SellerID  @"contact@usaeduschools.org"
+//#define SellerID  @"2088111491235432"
+////安全校验码（MD5）密钥  用签约支付宝账号登录ms.alipay.com后，在密钥管理页面获取
+//#define MD5_KEY @"lvwu3rau8w0u3lba3h6v4nlmufbyl2si"
+//
+////商户私钥，自助生成
+//#define PartnerPrivKey @"MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBALqK91nD/76Bxn74zwezocy96C3pkleZznMNj6q7QSwEAD0VzE997T7qr+/nvdCqJx2h4w4Ciu1JwAk8dimLtn2aiLM2eY72jS0LPHamafTrgySNJTH0huYAMO2WqNlqAExyLe/OqdSLbjTBgOz3qa5ADkRB0UyYvMwO3b3ZhoTxAgMBAAECgYACGzeXx+LHX+fB30VXLOwSx8IrYovIeXAfVHPe1aZyvMjT578a1q0rHLNH3jICfSlb6EwMCHNRIpgMgqZC6dTxqSjzlu2b4tST3KDha4kPtDPmsOKbpOFBVnf2TkDPvEmGcmIJXvvNCjredF0XexCOM6NxvfuAVKW/DOC1U/UxwQJBAPXALwu5ru10y5aaBqKFQkm0p1FKYvxQmJ7TDVfplN+RvBfLeylucxD84CBOEk9K5f7c/qDN2MiEBDd7KQoGc4UCQQDCUqKm4BzFISLEoxzYIzsweRPLUaF7XEfw1J0OnsCzgl/z0T5TLusncnpB3+GFw1xAn39BGi0wXj9SoBan4bl9AkAwRmJ3gTBVwR3FJdir0FWnOO+tTlmHiyWP/ZGfdWkjSfOTEQvOpb3A1owIjI2YOfRYTn1OhWFScmyJoY38RCwpAkEAvwB8cWw9uyG7y+3L70KJ7jZEV4eQIvHsoHJLQdCW9prCd6QHD7pBV0+1jcRiJpmEttxPN41kN3Ob6DoEqtU6/QJAIaATN+kz0BIciTsMYaRc6WK14h4MBAA8dirpHY01bhNC1jdQ+jXyla7zN1dZyHt150YnrgxNrLaBxHE2Azv9ng=="
+//
+//
+////支付宝公钥，用签约支付宝账号登录ms.alipay.com后获取。
+//#define AlipayPubKey   @"MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC6ivdZw/++gcZ++M8Hs6HMvegt6ZJXmc5zDY+qu0EsBAA9FcxPfe0+6q/v573QqicdoeMOAortScAJPHYpi7Z9moizNnmO9o0tCzx2pmn064MkjSUx9IbmADDtlqjZagBMci3vzqnUi240wYDs96muQA5EQdFMmLzMDt292YaE8QIDAQAB"
+
+//合作商户ID。用签约支付宝账号登录ms.alipay.com后，在账户信息页面获取。
+#define PartnerID @"2088411623736485"
+//账户ID。用签约支付宝账号登录ms.alipay.com后，在账户信息页面获取。
+//#define SellerID  @"contact@usaeduschools.org"
+#define SellerID  @"2088411623736485"
+//安全校验码（MD5）密钥  用签约支付宝账号登录ms.alipay.com后，在密钥管理页面获取
+#define MD5_KEY @"fkcrxh2l6il5jgagjhlwumugotygkb8k"
+
+//商户私钥，自助生成
+#define PartnerPrivKey @"MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBAKnYz4XRwqCt4AmUqQUI7Ky9HKaT2SdIq19gogHcP4PRpHXDgioyxGyITsOfttmmHVt4g6tyfaad14z4Q1frWbroBozrkxHUrg0YJb/gIY/7FN+ldpdEv3Zn5XCjAAbrdzQylIRW/7HdKbOnGGEBlWJr6XjRlknUTOOMiruCvCAnAgMBAAECgYEAl3zmUy/szM1odoMeYXw9RDCEHlreIzigiTgyJ0Cfcd4JNnQDY8nWAgttXPPV7bhIlO4fWkqKoZJEz9oajo8+fo86ifHmLQYNWz4AA69OAryp1NsvTc9TzeMcNHXHRY2WOk36w5Hof1HrlnaksNQiD8Esnrd3PM+Xc3MVZiHc7mECQQDSbVCh+psclBL4WjmXPgbSFHobxd2JlPuqoY8hr1tS+JbYuWeImZDpSq7nPtnHLtp1Rkd1mc4kl7VFzjqaqhxRAkEAzqGeBTrMQGEhgzyeuK74x51T/j96aaRAv+R7cpwRXEI6uMdd77/LnnF/HTMvYPaX/v35LpZxIv2OwZs3vXBu9wJAAzu4xHRkU8EWtYg1YFSMqEe2RJz6tXV7lHidCWh3X8QAFV5r79ZkOqFyJI17rSrUIn8s8+qkFz3ZhDQSBHResQJBAIqHXaqB5eePdulGHd8RJyakemgs5IOoo+RCaOTIbvccS8QPnRGb0wYRbzgDVdM632ILoSAzqfvcY/W2eyMdGrcCQEGGfPbqOvXAIdphCZ19CARwHjk5eWCK4eV2/q1/AE188Nvu0b4ILGRMl50epY8lkQa0LseYQbHQCRf0BA0DJk0="
+
+#define AlipayPubKey @"MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCnxj/9qwVfgoUh/y2W89L6BkRAFljhNhgPdyPuBV64bfQNN1PjbCzkIM6qRdKBoLPXmKKMiFYnkd6rAoprih3/PrQEB/VsW8OoM8fxn67UDYuyBTqA23MML9q1+ilIZwBC2AQ2UBVOrFXfFl75p6/B5KsiNG9zpgmLCUYuLkxpLQIDAQAB"
+//#define AlipayPubKey @"MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCp2M+F0cKgreAJlKkFCOysvRymk9knSKtfYKIB3D+D0aR1w4IqMsRsiE7Dn7bZph1beIOrcn2mndeM+ENX61m66AaM65MR1K4NGCW/4CGP+xTfpXaXRL92Z+VwowAG63c0MpSEVv+x3SmzpxhhAZVia+l40ZZJ1EzjjIq7grwgJwIDAQAB"
+
+#endif

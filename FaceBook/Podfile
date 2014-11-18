@@ -1,0 +1,2 @@
+pod 'JSONKit', '~> 1.5pre'
+pod 'SDWebImage', '~> 3.7.1'
