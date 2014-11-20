@@ -686,10 +686,14 @@
         [[DMCAlertCenter defaultCenter] postAlertWithMessage:@"请输入真实姓名"];
     }else if ([BCBaseObject isMobileNumber:phoneNumTextField.text] == NO) {
         [[DMCAlertCenter defaultCenter] postAlertWithMessage:@"请输入正确的合法的手机号"];
-    }else if (securityCodeTextField.text == nil || [securityCodeTextField.text isEqualToString:@""])
+    }
+    
+    else if (securityCodeTextField.text == nil || [securityCodeTextField.text isEqualToString:@""])
     {
         [[DMCAlertCenter defaultCenter] postAlertWithMessage:@"请输入验证码"];
-    }else if ([BCBaseObject checkInputPassword:passwordTextField.text]==NO)
+    }
+    
+    else if ([BCBaseObject checkInputPassword:passwordTextField.text]==NO)
     {
         [[DMCAlertCenter defaultCenter] postAlertWithMessage:@"请输入6-16位密码"];
     }else if (passwordAgainTextField.text == nil || [passwordAgainTextField.text isEqualToString:@""])
@@ -715,7 +719,7 @@
         NSString *areaStr = workAreaButton.titleLabel.text;
         [BCHTTPRequest RegisterTheFirstWithName:nameTextField.text WithPhone:phoneNumTextField.text WithCode:securityCodeTextField.text WithPassWord:passwordTextField.text WithGender:genderString WithNickName_First:nickname1TextField.text WithNickName_Second:nickname2TextField.text WithWorkCicy:cityStr WithWorkArea:areaStr WithPicture:logoStr WithClause:[NSString stringWithFormat:@"%d",agreeButton.tag] WithInvitation:invitationCodeTextField.text usingSuccessBlock:^(BOOL isSuccess, NSDictionary *resultDic) {
             if (isSuccess) {
-                
+    
                 DetailInfoViewController *DetailInfoVC = [[DetailInfoViewController alloc] init];
                 UINavigationController *DetailInfoNav = [[UINavigationController alloc] initWithRootViewController:DetailInfoVC];
                 [self presentViewController:DetailInfoNav animated:YES completion:^{
@@ -724,7 +728,7 @@
             }
         }];
     }
-    
+
 //    DetailInfoViewController *DetailInfoVC = [[DetailInfoViewController alloc] init];
 //    UINavigationController *DetailInfoNav = [[UINavigationController alloc] initWithRootViewController:DetailInfoVC];
 //    [self presentViewController:DetailInfoNav animated:YES completion:^{

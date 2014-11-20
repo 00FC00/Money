@@ -31,7 +31,9 @@
 #import "InformationMainViewController.h"
 #import "AdvertisementDetialsViewController.h"
 
+#import "RecentlyContactsDB.h"
 
+#import "MyPersonCenterViewController.h"
 
 @interface SUNLeftMenuViewController ()
 {
@@ -61,10 +63,10 @@
     }
     return self;
 }
+
 //烧毁该
 - (void)viewWillAppear:(BOOL)animated
 {
-    
     
     if (isP == NO) {
         isP = YES;
@@ -82,7 +84,7 @@
     }
     
     
-    
+    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_REMIND_NEW_MESSAGE object:nil];
     
     //    GlobalVariable *globalVariable = [GlobalVariable sharedGlobalVariable];
     //    if (globalVariable.meduleDic != nil) {
@@ -92,8 +94,6 @@
     //        globalVariable.meduleDic = nil;
     //
     //    }
-    
-    
 }
 
 
@@ -297,6 +297,7 @@
                 adHeadImageView1.contentMode = UIViewContentModeScaleAspectFit;
                 [adImageView1 addSubview:adHeadImageView1];
                 
+                
                 adTitleLabel1 = [[UILabel alloc] initWithFrame:CGRectMake(188/2, 26/2, 344/2, 34/2)];
                 adTitleLabel1.backgroundColor = [UIColor clearColor];
                 adTitleLabel1.font = [UIFont systemFontOfSize:16];
@@ -414,6 +415,9 @@
             headImageView.userInteractionEnabled = YES;
             [msgBackImageView addSubview:headImageView];
             
+            
+            
+            
             // 是VIP加V 不是的话不加
             markVipImageView = [[UIImageView alloc]initWithFrame:CGRectMake(92/2, 3, 25/2, 22/2)];
             markVipImageView.backgroundColor = [UIColor clearColor];
@@ -486,6 +490,21 @@
             NSArray *moduleNameArray = [[NSArray alloc] init];
             moduleNameArray = resultDic[@"list"];
             
+//            NSMutableArray *tempNameArr = [NSMutableArray array];
+//            
+//            for (NSString *name in moduleNameArray) {
+//                
+//                if ([name isEqualToString:@"朋友圈"] || [name isEqualToString:@"同乡校友"] ||[name isEqualToString:@"部落活动"]) {
+//                    
+//                }else
+//                {
+//                    [tempNameArr addObject:name];
+//                }
+//                
+//            }
+//            
+//            moduleNameArray = tempNameArr;
+            
             NSMutableArray *moduleUserArray = [[NSMutableArray alloc] initWithCapacity:100];
             if ([[NSUserDefaults standardUserDefaults] objectForKey:@"ModuleMenu"] ) {
                 [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ModuleMenu"];
@@ -506,10 +525,14 @@
                 }else if([moduleNameArray[i] isEqualToString:@"联系人"])
                 {
                     [dic setObject:@"lianxiren@2x" forKey:@"moduleImage"];
-                }else if([moduleNameArray[i] isEqualToString:@"朋友圈"])
+                }
+                
+                else if([moduleNameArray[i] isEqualToString:@"朋友圈"])
                 {
                     [dic setObject:@"pengyouquan@2x" forKey:@"moduleImage"];
-                }else if([moduleNameArray[i] isEqualToString:@"部落群"])
+                }
+                
+                else if([moduleNameArray[i] isEqualToString:@"部落群"])
                 {
                     [dic setObject:@"lianpuqun@2x" forKey:@"moduleImage"];
                 }else if([moduleNameArray[i] isEqualToString:@"部落墙"])
@@ -519,13 +542,18 @@
                 {
                     [dic setObject:@"zixun@2x" forKey:@"moduleImage"];
                     
-                }else if([moduleNameArray[i] isEqualToString:@"部落活动"])
+                }
+                
+                else if([moduleNameArray[i] isEqualToString:@"部落活动"])
                 {
                     [dic setObject:@"wodehuodong@2x" forKey:@"moduleImage"];
-                }else if([moduleNameArray[i] isEqualToString:@"同乡校友"])
+                }
+                else if([moduleNameArray[i] isEqualToString:@"同乡校友"])
                 {
                     [dic setObject:@"tongchenglaoxiang@2x" forKey:@"moduleImage"];
-                }else if([moduleNameArray[i] isEqualToString:@"部落消息"])
+                }
+                
+                else if([moduleNameArray[i] isEqualToString:@"部落消息"])
                 {
                     [dic setObject:@"xiaoxi@2x" forKey:@"moduleImage"];
                 }else if([moduleNameArray[i] isEqualToString:@"升级为VIP"])
@@ -579,12 +607,40 @@
         //未用
     }
 }
+
+#pragma mark - 点击头像
+
 - (void)clickHeadButton
 {
     NSLog(@"照片");
     
     
+//    if (!my_Unvc) {
+//        
+//        MyPersonCenterViewController *myPersonCenterVC = [[MyPersonCenterViewController alloc]init];
+//        my_Unvc = [[UINavigationController alloc] initWithRootViewController:myPersonCenterVC];
+//    }
+    
+//    [self.mm_drawerController.view addGestureRecognizer:self.mm_drawerController.tap];
+//    [self.mm_drawerController.view addGestureRecognizer:self.mm_drawerController.pan];
+//    [self.mm_drawerController setupGestureRecognizers];
+//    [self.mm_drawerController setCenterViewController:self.navSlideSwitchVC withCloseAnimation:YES completion:^(BOOL finished) {
+//        
+//        if (finished) {
+//            MyPersonCenterViewController *myPersonCenterVC = [[MyPersonCenterViewController alloc]init];
+//            
+//            [self.navSlideSwitchVC pushViewController:myPersonCenterVC animated:NO];
+//        }
+//    }];
+    
+    UIViewController * rootController =((AppDelegate*)[UIApplication sharedApplication].delegate).drawerController;
+    MyPersonCenterViewController *myPersonCenterVC = [[MyPersonCenterViewController alloc]init];
+    
+    [rootController.navigationController pushViewController:myPersonCenterVC animated:YES];
+    
 }
+
+#pragma mark -
 
 - (void)viewDidUnload
 {
@@ -765,8 +821,8 @@
         cell.backgroundColor = [UIColor colorWithRed:247.0f/255.0f green:247.0f/255.0f blue:247.0f/255.0f alpha:1.0f];
         cell.selectedBackgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"shouyecellxuanzhong@2x"]];
         
+        
     }
-    
     
     cell.titleLabel.text = menuArray[indexPath.row][@"moduleName"];
     [cell.markImageView setImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@",menuArray[indexPath.row][@"moduleImage"]]]];
@@ -796,6 +852,9 @@
     
     
     [[NSNotificationCenter defaultCenter] addObserverForName:@"remindNew" object:nil queue:nil usingBlock:^(NSNotification *note) {
+        
+        
+        
         if ([cell.titleLabel.text isEqualToString:@"部落消息"]) {
             if (redPoint) {
                 [redPoint setBackgroundColor:[UIColor clearColor]];
@@ -816,8 +875,49 @@
     }];
     
     
+    [[NSNotificationCenter defaultCenter] addObserverForName:NOTIFICATION_REMIND_NEW_MESSAGE object:nil queue:nil usingBlock:^(NSNotification *note) {
+        
+        if ([cell.titleLabel.text isEqualToString:@"聊天"]) {
+            if (redPoint_chat) {
+                [redPoint_chat setBackgroundColor:[UIColor clearColor]];
+            }else
+            {
+                redPoint_chat = [[UIImageView alloc]initWithFrame:CGRectMake(60 + 20, 34/2, 40/4, 40/4)];
+                [redPoint_chat setBackgroundColor:[UIColor clearColor]];
+                [cell.contentView addSubview:redPoint_chat];
+            }
+        }
+        
+        if ([self getUnreadCount] == 0) {
+            [redPoint_chat setImage:[UIImage imageNamed:@""]];
+        }else
+        {
+            [redPoint_chat setImage:[UIImage imageNamed:@"newRemind@2x"]];
+        }
+        
+    }];
+    
+    
     return cell;
     
+}
+
+#pragma mark - 获取未读消息
+
+- (int)getUnreadCount
+{
+    RecentlyContactsDB * recentlyContactsDB = [[RecentlyContactsDB alloc] init];
+    [recentlyContactsDB createDataBase];
+    
+    NSArray *arr  = [recentlyContactsDB getAllRecentlyContactsInfo];
+    
+    int sum = 0;
+    for (FMDBRecentlyContactsObject  *recentlyObj in arr) {
+        
+        sum += [recentlyObj.unReadNumber intValue];
+    }
+    
+    return sum;
 }
 
 //删除

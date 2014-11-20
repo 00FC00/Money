@@ -30,3 +30,5 @@
 #define kHarpyAppID                 @"934251737"
 #define FSHNewMessageNotifaction @"FSHNewMessageNotifaction"
 #define ALIPAYRESULT @"ALIPAYRESULT"
+
+#define NOTIFICATION_REMIND_NEW_MESSAGE @"remind_new_message"//接收消息通知
