@@ -84,7 +84,7 @@
 + (void)loginTheFaceBookWithPhone:(NSString *)phone WithPassWord:(NSString *)password UsingSuccessBlock:(void (^)(BOOL isSuccess,NSDictionary*resultDic))successBlock
 {
     AFHTTPClient *httpClient = [[AFHTTPClient alloc] initWithBaseURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@index.php?r=default/start/login/",kMainUrlString]]];
-   
+    
     NSMutableURLRequest *request = [httpClient multipartFormRequestWithMethod:@"POST" path:nil parameters:nil constructingBodyWithBlock: ^(id <AFMultipartFormData>formData)  {
         [formData appendPartWithFormData:[phone dataUsingEncoding:NSUTF8StringEncoding] name:@"phone"];
         [formData appendPartWithFormData:[password dataUsingEncoding:NSUTF8StringEncoding] name:@"password"];

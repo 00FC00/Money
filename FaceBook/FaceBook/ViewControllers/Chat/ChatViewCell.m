@@ -35,6 +35,10 @@
     _headImageView.userInteractionEnabled = YES;
     [_cellBackImageView addSubview:_headImageView];
     
+    UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(headerTap:)];
+    [_headImageView addGestureRecognizer:tap];
+    
+    
     //信息条数背景numberBackImageView;
     _numberBackImageView = [[UIImageView alloc]initWithFrame:CGRectMake(50, 4, 19, 19)];
     _numberBackImageView.backgroundColor = [UIColor clearColor];
@@ -91,6 +95,17 @@
     [_cellBackImageView addSubview:_lineImageView];
     
 }
+
+-(void)setHeaderViewtap:(ChatViewCellBlock)aBlock
+{
+    chatViewCell_block = aBlock;
+}
+
+-(void)headerTap:(UITapGestureRecognizer *)sender
+{
+    chatViewCell_block(self);
+}
+
 - (void)awakeFromNib
 {
     // Initialization code

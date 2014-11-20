@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "OHLableHelper.h"
 #import "AttributedLabel.h"
 @interface FriendsCircleCell : UITableViewCell
 //用户的头像背景
@@ -23,7 +24,7 @@
 //照片背景
 @property (strong, nonatomic) UIImageView *photoBackImageView;
 //说说内容
-@property (strong, nonatomic) UILabel *messageLabel;
+@property (strong, nonatomic) OHAttributedLabel *messageLabel;
 //操作按钮
 @property (strong, nonatomic) UIButton *operationButton;
 //操作框

@@ -7,8 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
-
+@class ChatViewCell;
+typedef void(^ChatViewCellBlock)(ChatViewCell * cell);
 @interface ChatViewCell : UITableViewCell
+{
+    ChatViewCellBlock chatViewCell_block;
+}
+
+
 //cell背景
 @property (strong, nonatomic) UIImageView *cellBackImageView;
 //头像
@@ -27,5 +33,7 @@
 @property (strong, nonatomic) UILabel *dateLabel;
 //下划线
 @property (strong, nonatomic) UIImageView *lineImageView;
+
+-(void)setHeaderViewtap:(ChatViewCellBlock)aBlock;
 
 @end

@@ -29,6 +29,7 @@
 #import "SUNViewController.h"
 #import "MMDrawerController.h"
 #import "UIViewController+MMDrawerController.h"
+#import "MySweepViewController.h"
 
 @interface FriendsCircleViewController ()
 {
@@ -61,7 +62,7 @@
     
     NSString *isPaim;
     
-  
+    OHAttributedLabel * test_label;
 }
 @end
 
@@ -103,16 +104,20 @@
     UIBarButtonItem *backbuttonitem=[[UIBarButtonItem alloc]initWithCustomView:menuButton];
     self.navigationItem.leftBarButtonItem=backbuttonitem;
     
+    
+    UIBarButtonItem * space = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
+    space.width = -10;
+    
     //设置
     UIButton *setButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    setButton.frame = CGRectMake(526/2, 22, 80/2, 80/2);
-    [setButton setBackgroundImage:[UIImage imageNamed:@"shezhianniu@2x"] forState:UIControlStateNormal];
+    setButton.frame = CGRectMake(526/2,0, 60/2,88/2);
+    [setButton setImage:[UIImage imageNamed:@"barbuttonicon_Camera"] forState:UIControlStateNormal];
     //[setButton setTitle:@"登录" forState:UIControlStateNormal];
     //setButton.titleLabel.font = [UIFont systemFontOfSize:15];
     //[setButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [setButton addTarget:self action:@selector(setButtonClicked) forControlEvents:UIControlEventTouchUpInside];
+    [setButton addTarget:self action:@selector(clickMyEditButton) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *rightbuttonitem=[[UIBarButtonItem alloc]initWithCustomView:setButton];
-    self.navigationItem.rightBarButtonItem=rightbuttonitem;
+    self.navigationItem.rightBarButtonItems = [NSArray arrayWithObjects:space,rightbuttonitem,nil];
     
     otherNotice = [[OtherNotice alloc]init];
     [otherNotice createDataBase];
@@ -120,21 +125,17 @@
     otherObj = [otherNotice getAllOthersRemindStyleWithNumber:@"1"];
     
     //朋友圈列表
-    friendsCircleTableView = [[UITableView alloc]initWithFrame:CGRectMake(6, 0, [[UIScreen mainScreen] bounds].size.width-12, [[UIScreen mainScreen] bounds].size.height-64) style:UITableViewStylePlain];
+    friendsCircleTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, [[UIScreen mainScreen] bounds].size.width, [[UIScreen mainScreen] bounds].size.height-64) style:UITableViewStylePlain];
     friendsCircleTableView.backgroundColor = [UIColor clearColor];
     friendsCircleTableView.delegate = self;
     friendsCircleTableView.dataSource = self;
-    friendsCircleTableView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [[UIScreen mainScreen] bounds].size.width-12, 320/2)];
-    friendsCircleTableView.tableHeaderView.backgroundColor = [UIColor clearColor];
+    friendsCircleTableView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [[UIScreen mainScreen] bounds].size.width,305)];
+    friendsCircleTableView.tableHeaderView.backgroundColor = [UIColor whiteColor];
     if (IS_IOS_7) {
         friendsCircleTableView.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0);
     }
     
     [self.view addSubview:friendsCircleTableView];
-    
-   
-    
-    
     
     //获取数据
     [self getData:pageNumber];
@@ -178,9 +179,14 @@
             
             FriendsCircleCell *cell = (FriendsCircleCell*)[friendsCircleTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:w inSection:0]];
             
-            if (cell.operationBackImageView.hidden == NO) {
+            if (cell.operationBackImageView.frame.size.width == 180) {
                 [cell.operationButton setTitle:@"隐藏" forState:UIControlStateNormal];
-                cell.operationBackImageView.hidden = YES;
+//                cell.operationBackImageView.hidden = YES;
+                [UIView animateWithDuration:0.3 animations:^{
+                    cell.operationBackImageView.frame = CGRectMake(280,cell.operationBackImageView.frame.origin.y,0,40);
+                } completion:^(BOOL finished) {
+                    
+                }];
             }
         }
         
@@ -313,33 +319,46 @@
     CGFloat contectHeight;
     NSString *str1 = friendArray[indexPath.row][@"content"];
     
-    CGSize size1;
+//    CGSize size1;
     //***********ios7的方法
-    if ([[[UIDevice currentDevice] systemVersion] floatValue]>=7)
+//    if ([[[UIDevice currentDevice] systemVersion] floatValue]>=7)
+//    {
+//        NSDictionary *attribute = @{NSFontAttributeName: [UIFont systemFontOfSize:15]};
+//        size1 = [str1 boundingRectWithSize:CGSizeMake(492/2, 1000) options: NSStringDrawingTruncatesLastVisibleLine | NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading attributes:attribute context:nil].size;
+//    }else
+//    {
+//        //***********ios6的方法
+//        size1 = [str1 sizeWithFont:[UIFont systemFontOfSize:15]constrainedToSize:CGSizeMake(492/2,1000) lineBreakMode:NSLineBreakByWordWrapping];
+//    }
+    
+    if (!test_label)
     {
-        NSDictionary *attribute = @{NSFontAttributeName: [UIFont systemFontOfSize:15]};
-        size1 = [str1 boundingRectWithSize:CGSizeMake(492/2, 1000) options: NSStringDrawingTruncatesLastVisibleLine | NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading attributes:attribute context:nil].size;
+        test_label = [[OHAttributedLabel alloc]initWithFrame:CGRectMake(60,40,492/2,0)];
+        test_label.font = [UIFont systemFontOfSize:15];
+        test_label.lineBreakMode = NSLineBreakByCharWrapping;
     }else
     {
-        //***********ios6的方法
-        size1 = [str1 sizeWithFont:[UIFont systemFontOfSize:15]constrainedToSize:CGSizeMake(492/2,1000) lineBreakMode:NSLineBreakByWordWrapping];
+        test_label.frame = CGRectMake(60,40,492/2,0);
     }
-    contectHeight = size1.height+8/2;
+    if (str1.length != 0) {
+        [OHLableHelper creatAttributedText:str1 Label:test_label OHDelegate:self WithWidht:18 WithHeight:18 WithLineBreak:NO];
+    }
+    
+    contectHeight = test_label.frame.size.height+5;
     //评论按钮38/2
     //评论高度
     
     commentArray = friendArray[indexPath.row][@"comments"];
     CGFloat mycommentHeight = 13;
     if (commentArray.count > 0) {
-        
-        for (int h = 0; h<[commentArray count]; h++) {
+        for (int h = 0; h<[commentArray count]; h++)
+        {
             //名字
             NSString *commentString = [[NSString alloc]init];
             if ([commentArray[h][@"to_name"] isEqualToString:commentArray[h][@"from_name"]]) {
                 commentString = [NSString stringWithFormat:@"%@:%@",commentArray[h][@"from_name"],commentArray[h][@"content"]];
             }else
             {
-                
                 commentString = [NSString stringWithFormat:@"%@回复%@:%@",commentArray[h][@"from_name"],commentArray[h][@"to_name"],commentArray[h][@"content"]];
             }
             
@@ -348,14 +367,15 @@
             if ([[[UIDevice currentDevice] systemVersion] floatValue]>=7)
             {
                 NSDictionary *attribute = @{NSFontAttributeName: [UIFont systemFontOfSize:14]};
-                commentSize = [commentString boundingRectWithSize:CGSizeMake(440/2, 1000000) options: NSStringDrawingTruncatesLastVisibleLine | NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading attributes:attribute context:nil].size;
+                commentSize = [commentString boundingRectWithSize:CGSizeMake(232, 1000000) options: NSStringDrawingTruncatesLastVisibleLine | NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading attributes:attribute context:nil].size;
             }else
             {
                 //***********ios6的方法
-                commentSize = [commentString sizeWithFont:[UIFont systemFontOfSize:14]constrainedToSize:CGSizeMake(440/2, 1000000) lineBreakMode:NSLineBreakByWordWrapping];
+                commentSize = [commentString sizeWithFont:[UIFont systemFontOfSize:14]constrainedToSize:CGSizeMake(232, 1000000) lineBreakMode:NSLineBreakByWordWrapping];
             }
             mycommentHeight += commentSize.height;
         }
+        mycommentHeight += 19;
     }else
     {
         mycommentHeight = 0;
@@ -364,7 +384,7 @@
         
         return 49+picHeight+4+38/2+mycommentHeight+15;
     }
-    return 49+picHeight+contectHeight+38/2+mycommentHeight+15;
+    return 49+picHeight+contectHeight+mycommentHeight+15;
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -372,29 +392,22 @@
     FriendsCircleCell *cell = [tableView dequeueReusableCellWithIdentifier:SimepleNewsListcell];
     if (cell == nil) {
         cell = [[FriendsCircleCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:SimepleNewsListcell];
-        
-        
     }
-    //    else
-    //    {
-    //        while([cell.commentsBackImageView.subviews lastObject]!=nil){
-    //            [[cell.commentsBackImageView.subviews lastObject]removeFromSuperview];
-    //
-    //        }
-    //
-    //    }
+    [cell.messageLabel setAttString:[[NSAttributedString alloc] initWithString:@""] withImages:nil];
+    cell.messageLabel.frame = CGRectMake(60,40,492/2,0);
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     //头像背景
     [cell.marksImageView setImage:[UIImage imageNamed:@"metouxiangbeijing@2x"]];
     //头像
-    [cell.userImageView setImageWithURL:[NSURL URLWithString:friendArray[indexPath.row][@"pic"]] placeholderImage:[UIImage imageNamed:@"ceshi@2x"] ];
+    [cell.userImageView sd_setImageWithURL:[NSURL URLWithString:friendArray[indexPath.row][@"pic"]] placeholderImage:[UIImage imageNamed:@"ceshi@2x"]];
     //[cell.userImageView setImage:[UIImage imageNamed:@"ceshi@2x"]];
     [cell.userImageButton setTag:5000+indexPath.row];
     [cell.userImageButton addTarget:self action:@selector(clickUserImageButton:) forControlEvents:UIControlEventTouchUpInside];
     //名字
     cell.userNameLabel.text = friendArray[indexPath.row][@"name"];
     //日期
-    cell.postDateTimeLabel.text = friendArray[indexPath.row][@"add_time"];
+    cell.postDateTimeLabel.text = [OHLableHelper timestamp:friendArray[indexPath.row][@"add_time"]];
+    
     //分割线
     [cell.horizontalLineImageView setImage:[UIImage imageNamed:@"xiahuaxian@2x"]];
 //    //拨号按钮
@@ -408,27 +421,29 @@
     NSString *str1 = friendArray[indexPath.row][@"content"];
     CGSize size1;
     //***********ios7的方法
-    if (IS_IOS_7)
-    {
-        NSDictionary *attribute = @{NSFontAttributeName: [UIFont systemFontOfSize:15]};
-        size1 = [str1 boundingRectWithSize:CGSizeMake(492/2, 1000) options: NSStringDrawingTruncatesLastVisibleLine | NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading attributes:attribute context:nil].size;
-    }else
-    {
-        //***********ios6的方法
-        size1 = [str1 sizeWithFont:[UIFont systemFontOfSize:15]constrainedToSize:CGSizeMake(492/2,1000) lineBreakMode:NSLineBreakByWordWrapping];
-    }
+//    if (IS_IOS_7)
+//    {
+//        NSDictionary *attribute = @{NSFontAttributeName: [UIFont systemFontOfSize:15]};
+//        size1 = [str1 boundingRectWithSize:CGSizeMake(492/2, 1000) options: NSStringDrawingTruncatesLastVisibleLine | NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading attributes:attribute context:nil].size;
+//    }else
+//    {
+//        //***********ios6的方法
+//        size1 = [str1 sizeWithFont:[UIFont systemFontOfSize:15]constrainedToSize:CGSizeMake(492/2,1000) lineBreakMode:NSLineBreakByWordWrapping];
+//    }
+//
+    
     NSLog(@"上面高度%f",cell.photoBackImageView.frame.origin.y+cell.photoBackImageView.frame.size.height);
     if ([str1 length]==0) {
         size1.height = 0;
+    }else
+    {
+        [OHLableHelper creatAttributedText:str1 Label:cell.messageLabel OHDelegate:self WithWidht:18 WithHeight:18 WithLineBreak:NO];
     }
     
     //********************
-    cell.messageLabel.frame =CGRectMake(114/2, 44, size1.width, size1.height);
-    cell.messageLabel.text = str1;
+//    cell.messageLabel.frame =CGRectMake(60,40,size1.width,size1.height);
+//    cell.messageLabel.text = str1;
 
-    
-    
-    
     //根据图片的数组加载图片
     for (UIView * sview in cell.photoBackImageView.subviews) {
         if (sview.tag >= 10000000) {
@@ -441,7 +456,7 @@
     if (pictureArray.count > 0) {
         for (NSInteger i = 0; i< pictureArray.count; i++) {
             UIImageView * commentsImageView = [[UIImageView alloc] initWithFrame:CGRectMake(1+83*(i%3), 84*(i/3), 148/2, 148/2)];
-            [commentsImageView setImageWithURL:[NSURL URLWithString:[pictureArray objectAtIndex:i]] placeholderImage:[UIImage imageNamed:@"quantupianbeijing@2x"]];
+            [commentsImageView sd_setImageWithURL:[NSURL URLWithString:[pictureArray objectAtIndex:i]] placeholderImage:[UIImage imageNamed:@"quantupianbeijing@2x"]];
             commentsImageView.tag = 10000000+i;
             //[commentsImageView setImage:[UIImage imageNamed:@"lizi@2x.png"]];
             commentsImageView.userInteractionEnabled = YES;
@@ -481,50 +496,50 @@
     
     
     //图片背景
-    cell.photoBackImageView.frame = CGRectMake(118/2, cell.messageLabel.frame.origin.y+cell.messageLabel.frame.size.height, 498/2, 84*K);
+    cell.photoBackImageView.frame = CGRectMake(60, cell.messageLabel.frame.origin.y+cell.messageLabel.frame.size.height+5, 498/2, 84*K);
     
     
     
     
 ///****feng,sh_8-13_改朋友圈
     //操作按钮
-    cell.operationButton.frame = CGRectMake(548/2, cell.photoBackImageView.frame.origin.y+ cell.photoBackImageView.frame.size.height+4, 50/2, 52/2);
+    cell.operationButton.frame = CGRectMake(284, cell.photoBackImageView.frame.origin.y+ cell.photoBackImageView.frame.size.height+4, 50/2, 52/2);
     NSLog(@"阿牛的坐标%f",cell.photoBackImageView.frame.origin.y+ cell.photoBackImageView.frame.size.height+4);
     [cell.operationButton setTitle:@"隐藏" forState:UIControlStateNormal];
-    [cell.operationButton setBackgroundImage:[UIImage imageNamed:@"caozuoanniu@2x"] forState:UIControlStateNormal];
+    [cell.operationButton setBackgroundImage:[UIImage imageNamed:@"AlbumOperateMore"] forState:UIControlStateNormal];
     [cell.operationButton setTag:2000+indexPath.row];
     [cell.operationButton addTarget:self action:@selector(clickOperationButton:) forControlEvents:UIControlEventTouchUpInside];
     
-//    ////操作框
-//    cell.operationBackImageView.frame = CGRectMake(338/2, cell.operationButton.frame.origin.y+2,204/2, 50/2);
+    ////操作框
+    cell.operationBackImageView.frame = CGRectMake(280, cell.operationButton.frame.origin.y-7,0,40);
 //    [cell.operationBackImageView setImage:[UIImage imageNamed:@"caozuokuang@2x"]];
-//    cell.operationBackImageView.tag = 5000+indexPath.row;
+    cell.operationBackImageView.tag = 5000+indexPath.row;
 //    if ([cell.operationButton.titleLabel.text isEqualToString:@"显示"]) {
 //        cell.operationBackImageView.hidden = NO;
 //    }else
 //    {
 //        cell.operationBackImageView.hidden = YES;
 //    }
-//    
-//    //评论
-//    cell.commentButton.tag = 7000+indexPath.row;
-//    [cell.commentButton setBackgroundImage:[UIImage imageNamed:@"pinglun1@2x"] forState:UIControlStateNormal];
-//    [cell.commentButton setTitleColor:[UIColor clearColor] forState:UIControlStateNormal];
-//    [cell.commentButton setTitle:@"隐" forState:UIControlStateNormal];
-//    [cell.commentButton addTarget:self action:@selector(clickCommentButton:) forControlEvents:UIControlEventTouchUpInside];
-//    
-//    //赞
-//    cell.lovesButton.tag = 9000+indexPath.row;
-//    if ([friendArray[indexPath.row][@"love"] intValue]==0) {
-//        [cell.lovesButton setTitle:@"不赞" forState:UIControlStateNormal];
-//        [cell.lovesButton setBackgroundImage:[UIImage imageNamed:@"dianzan1@2x"] forState:UIControlStateNormal];
-//    }else if ([friendArray[indexPath.row][@"love"] intValue]==1)
-//    {
-//        [cell.lovesButton setTitle:@"赞" forState:UIControlStateNormal];
-//        [cell.lovesButton setBackgroundImage:[UIImage imageNamed:@"dianzan2@2x"] forState:UIControlStateNormal];
-//    }
-//    
-//    [cell.lovesButton addTarget:self action:@selector(clickLovesButtonButton:) forControlEvents:UIControlEventTouchUpInside];
+    
+    //评论
+    cell.commentButton.tag = 7000+indexPath.row;
+    [cell.commentButton setBackgroundImage:[UIImage imageNamed:@"pinglun_image"] forState:UIControlStateNormal];
+    [cell.commentButton setTitleColor:[UIColor clearColor] forState:UIControlStateNormal];
+    [cell.commentButton setTitle:@"隐" forState:UIControlStateNormal];
+    [cell.commentButton addTarget:self action:@selector(clickCommentButton:) forControlEvents:UIControlEventTouchUpInside];
+    
+    //赞
+    cell.lovesButton.tag = 9000+indexPath.row;
+    if ([friendArray[indexPath.row][@"love"] intValue]==0) {
+        [cell.lovesButton setTitle:@"不赞" forState:UIControlStateNormal];
+        [cell.lovesButton setBackgroundImage:[UIImage imageNamed:@"wei_zan_image"] forState:UIControlStateNormal];
+    }else if ([friendArray[indexPath.row][@"love"] intValue]==1)
+    {
+        [cell.lovesButton setTitle:@"赞" forState:UIControlStateNormal];
+        [cell.lovesButton setBackgroundImage:[UIImage imageNamed:@"yi_zan_image"] forState:UIControlStateNormal];
+    }
+    
+    [cell.lovesButton addTarget:self action:@selector(clickLovesButtonButton:) forControlEvents:UIControlEventTouchUpInside];
     
     //评论回复
     
@@ -567,11 +582,11 @@
             if (IS_IOS_7)
             {
                 NSDictionary *attribute = @{NSFontAttributeName: [UIFont systemFontOfSize:14]};
-                commentSize = [commentString boundingRectWithSize:CGSizeMake(440/2, 1000000) options: NSStringDrawingTruncatesLastVisibleLine | NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading attributes:attribute context:nil].size;
+                commentSize = [commentString boundingRectWithSize:CGSizeMake(232, 1000000) options: NSStringDrawingTruncatesLastVisibleLine | NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading attributes:attribute context:nil].size;
             }else
             {
                 //***********ios6的方法
-                commentSize = [commentString sizeWithFont:[UIFont systemFontOfSize:14]constrainedToSize:CGSizeMake(440/2, 1000000) lineBreakMode:NSLineBreakByWordWrapping];
+                commentSize = [commentString sizeWithFont:[UIFont systemFontOfSize:14]constrainedToSize:CGSizeMake(232, 1000000) lineBreakMode:NSLineBreakByWordWrapping];
             }
             
             
@@ -588,13 +603,13 @@
             
             if ([commentArray[h][@"to_name"] isEqualToString:commentArray[h][@"from_name"]]) {
                 
-                [attrTitle addAttribute:NSForegroundColorAttributeName value:[UIColor blueColor] range:NSMakeRange(0, [commentArray[h][@"from_name"] length])];
+                [attrTitle addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithRed:86/255.0f green:104/255.0f blue:154/255.0f alpha:1] range:NSMakeRange(0, [commentArray[h][@"from_name"] length])];
             }else
             {
                 
                 
-                [attrTitle addAttribute:NSForegroundColorAttributeName value:[UIColor blueColor] range:NSMakeRange(0, [commentArray[h][@"from_name"] length])];
-                [attrTitle addAttribute:NSForegroundColorAttributeName value:[UIColor blueColor] range:NSMakeRange(([commentArray[h][@"from_name"] length])+2, [commentArray[h][@"to_name"] length])];
+                [attrTitle addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithRed:86/255.0f green:104/255.0f blue:154/255.0f alpha:1] range:NSMakeRange(0, [commentArray[h][@"from_name"] length])];
+                [attrTitle addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithRed:86/255.0f green:104/255.0f blue:154/255.0f alpha:1] range:NSMakeRange(([commentArray[h][@"from_name"] length])+2, [commentArray[h][@"to_name"] length])];
                 
             }
             commentContentLabel.userInteractionEnabled = YES;
@@ -617,8 +632,8 @@
     }
     
     
-    cell.commentsBackImageView.frame = CGRectMake(112/2, cell.operationButton.frame.origin.y+29, 476/2, commentHeight+10);
-    
+    cell.commentsBackImageView.frame = CGRectMake(112/2, cell.operationButton.frame.origin.y+29,250, commentHeight+10);
+    cell.postDateTimeLabel.frame = CGRectMake(60,cell.operationButton.frame.origin.y,cell.postDateTimeLabel.frame.size.width,cell.postDateTimeLabel.frame.size.height);
     //竖线
    // cell.verticalLineImageView.frame = CGRectMake(45, cell.marksImageView.frame.origin.y+cell.marksImageView.frame.size.height,2,49+cell.photoBackImageView.frame.size.height+13+cell.messageLabel.frame.size.height+29+commentHeight+10-12-cell.marksImageView.frame.size.height+5);
   //  [cell.verticalLineImageView setImage:[UIImage imageNamed:@"pengyouquanshuxian@2x"]];
@@ -654,6 +669,7 @@
 #pragma mark - 点击头像
 - (void)clickUserImageButton:(UIButton *)button
 {
+    /*
     //5000+indexPath.row]
     NSLog(@"--tag值----->%ld---------%@------",button.tag,friendArray[(button.tag-5000)][@"user_id"]);
     OtherFriendsCircleViewController *otherFriendsCircleVC = [[OtherFriendsCircleViewController alloc]init];
@@ -668,6 +684,14 @@
         otherFriendsCircleVC.fid = toFid;
         [self.navigationController pushViewController:otherFriendsCircleVC animated:YES];
 //    }
+    */
+    
+    
+    MySweepViewController *mySweepVC = [[MySweepViewController alloc]init];
+    mySweepVC.friendIdString = friendArray[(button.tag-5000)][@"user_id"];
+    mySweepVC.groupIdString = @"0";
+    mySweepVC.groupTypeString = @"4";
+    [self.navigationController pushViewController:mySweepVC animated:YES];
     
 }
 #pragma mark - 评论按钮
@@ -696,12 +720,12 @@
 {
     NSString *myMark = [[NSString alloc]init];
     if ([lovesbutton.titleLabel.text isEqualToString:@"不赞"]) {
-        [lovesbutton setBackgroundImage:[UIImage imageNamed:@"dianzan2@2x"] forState:UIControlStateNormal];
+        [lovesbutton setBackgroundImage:[UIImage imageNamed:@"yi_zan_image"] forState:UIControlStateNormal];
         [lovesbutton setTitle:@"赞" forState:UIControlStateNormal];
         myMark = @"1";
     }else
     {
-        [lovesbutton setBackgroundImage:[UIImage imageNamed:@"dianzan1@2x"] forState:UIControlStateNormal];
+        [lovesbutton setBackgroundImage:[UIImage imageNamed:@"wei_zan_image"] forState:UIControlStateNormal];
         [lovesbutton setTitle:@"不赞" forState:UIControlStateNormal];
         myMark = @"2";
     }
@@ -751,26 +775,39 @@
 #pragma mark - 操作按钮
 - (void)clickOperationButton:(UIButton *)senderButton
 {
-//    for (int q = 0; q< friendArray.count; q++) {
-//        
-//        FriendsCircleCell *cell = (FriendsCircleCell*)[friendsCircleTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:q inSection:0]];
-//        if (q == senderButton.tag-2000) {
-//            if (cell.operationBackImageView.hidden == NO) {
-//                [cell.operationButton setTitle:@"隐藏" forState:UIControlStateNormal];
+    for (int q = 0; q< friendArray.count; q++) {
+        
+        FriendsCircleCell *cell = (FriendsCircleCell*)[friendsCircleTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:q inSection:0]];
+        if (q == senderButton.tag-2000) {
+            
+            BOOL isShow;
+            if (cell.operationBackImageView.frame.size.width == 180)
+            {
+                [cell.operationButton setTitle:@"隐藏" forState:UIControlStateNormal];
 //                cell.operationBackImageView.hidden = YES;
-//            }else{
-//                [cell.operationButton setTitle:@"显示" forState:UIControlStateNormal];
+                isShow = NO;
+                
+            }else{
+                [cell.operationButton setTitle:@"显示" forState:UIControlStateNormal];
 //                cell.operationBackImageView.hidden = NO;
-//                
-//            }
-//        }else
-//        {
-//            [cell.operationButton setTitle:@"隐藏" forState:UIControlStateNormal];
+                isShow = YES;
+            }
+            
+            [UIView animateWithDuration:0.3 animations:^{
+                cell.operationBackImageView.frame = CGRectMake(isShow?100:280,cell.operationBackImageView.frame.origin.y,isShow?180:0,40);
+            } completion:^(BOOL finished) {
+                
+            }];
+            
+        }else
+        {
+            [cell.operationButton setTitle:@"隐藏" forState:UIControlStateNormal];
 //            cell.operationBackImageView.hidden = YES;
-//            
-//        }
-//    }
-
+            cell.operationBackImageView.frame = CGRectMake(280,cell.operationBackImageView.frame.origin.y,0,40);
+            
+        }
+    }
+/*
     businessID = friendArray[senderButton.tag - 2000][@"id"];
     isCellNumber = senderButton.tag-2000;
     isReplyMe = @"me";
@@ -786,11 +823,14 @@
         }];
         
     }
-
+*/
 }
 #pragma mark - 弹出键盘
 - (void)showMyTextFieldKeyBoard
 {
+    if (replyImageView) {
+        [replyImageView removeFromSuperview];
+    }
     //回复框背景replyImageView;
     replyImageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, [[UIScreen mainScreen] bounds].size.height-64-49, [[UIScreen mainScreen] bounds].size.width, 49)];
     replyImageView.backgroundColor = [UIColor clearColor];
@@ -974,9 +1014,9 @@
             if (isSuccess == YES) {
                 
                 //朋友圈背景backImageView;
-                backImageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, [[UIScreen mainScreen] bounds].size.width, 320/2)];
+                backImageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, [[UIScreen mainScreen] bounds].size.width,256)];
                 backImageView.backgroundColor = [UIColor clearColor];
-                [backImageView setImageWithURL:[NSURL URLWithString:resultDic[@"background"]] placeholderImage:[UIImage imageNamed:@"ceshibeijing@2x"]];
+                [backImageView sd_setImageWithURL:[NSURL URLWithString:resultDic[@"background"]] placeholderImage:[UIImage imageNamed:@"ceshibeijing@2x"]];
                 backImageView.userInteractionEnabled = YES;
                 [backImageView setContentMode:UIViewContentModeScaleAspectFill];
                 backImageView.clipsToBounds = YES;
@@ -989,39 +1029,43 @@
                 tapRecognizer.cancelsTouchesInView = YES;
                 [backImageView addGestureRecognizer:tapRecognizer];
                 
-                //头像markheadImageView; //headerImageView;
-                markheadImageView = [[UIImageView alloc]initWithFrame:CGRectMake(248/2, 88/2, 146/2, 146/2)];
-                markheadImageView.backgroundColor = [UIColor clearColor];
-                [markheadImageView setImage:[UIImage imageNamed:@"pengyouquantouxiang@2x"]];
-                markheadImageView.userInteractionEnabled = YES;
-                [markheadImageView.layer setMasksToBounds:YES];
-                [markheadImageView.layer setCornerRadius:36.5f];
-                [backImageView addSubview:markheadImageView];
+//                //头像markheadImageView; //headerImageView;
+//                markheadImageView = [[UIImageView alloc]initWithFrame:CGRectMake(248/2,206,75,75)];
+//                markheadImageView.backgroundColor = [UIColor clearColor];
+//                [markheadImageView setImage:[UIImage imageNamed:@"pengyouquantouxiang@2x"]];
+//                markheadImageView.userInteractionEnabled = YES;
+//                [markheadImageView.layer setMasksToBounds:YES];
+////                [markheadImageView.layer setCornerRadius:36.5f];
+//                markheadImageView.layer.borderColor = [UIColor whiteColor].CGColor;
+//                markheadImageView.layer.borderWidth = 1.0f;
+//                [friendsCircleTableView.tableHeaderView addSubview:markheadImageView];
                 
-                headerImageView = [[UIImageView alloc]initWithFrame:CGRectMake(5/2,5/2, 136/2, 136/2)];
+                headerImageView = [[UIImageView alloc]initWithFrame:CGRectMake(230,206,75,75)];
                 headerImageView.backgroundColor = [UIColor cyanColor];
-                [headerImageView setImageWithURL:[NSURL URLWithString:resultDic[@"pic"]] placeholderImage:[UIImage imageNamed:@"ceshi@2x"]];
+                [headerImageView sd_setImageWithURL:[NSURL URLWithString:resultDic[@"pic"]] placeholderImage:[UIImage imageNamed:@"ceshi@2x"]];
                 headerImageView.userInteractionEnabled = YES;
                 [headerImageView.layer setMasksToBounds:YES];
-                [headerImageView.layer setCornerRadius:34.0f];
-                [markheadImageView addSubview:headerImageView];
+                headerImageView.layer.borderColor = [UIColor whiteColor].CGColor;
+                headerImageView.layer.borderWidth = 1.0f;
+//                [headerImageView.layer setCornerRadius:34.0f];
+                [friendsCircleTableView.tableHeaderView addSubview:headerImageView];
                 
                 //名字
-                myNameLabel = [[UILabel alloc]initWithFrame:CGRectMake(152/2, 242/2, 334/2, 36/2)];
+                myNameLabel = [[UILabel alloc]initWithFrame:CGRectMake(34,224,180,36/2)];
                 myNameLabel.backgroundColor = [UIColor clearColor];
-                myNameLabel.textAlignment = NSTextAlignmentCenter;
+                myNameLabel.textAlignment = NSTextAlignmentRight;
                 myNameLabel.textColor = [UIColor whiteColor];
-                myNameLabel.font = [UIFont systemFontOfSize:17];
+                myNameLabel.font = [UIFont systemFontOfSize:18];
                 myNameLabel.text = resultDic[@"name"];
                 [backImageView addSubview:myNameLabel];
                 
-                //编辑myEditButton;
-                myEditButton = [UIButton buttonWithType:UIButtonTypeCustom];
-                myEditButton.frame = CGRectMake(542/2, 234/2, 40, 40);
-                myEditButton.backgroundColor = [UIColor clearColor];
-                [myEditButton setBackgroundImage:[UIImage imageNamed:@"qianbi@2x"] forState:UIControlStateNormal];
-                [myEditButton addTarget:self action:@selector(clickMyEditButton) forControlEvents:UIControlEventTouchUpInside];
-                [backImageView addSubview:myEditButton];
+//                //编辑myEditButton;
+//                myEditButton = [UIButton buttonWithType:UIButtonTypeCustom];
+//                myEditButton.frame = CGRectMake(542/2, 234/2, 40, 40);
+//                myEditButton.backgroundColor = [UIColor clearColor];
+//                [myEditButton setBackgroundImage:[UIImage imageNamed:@"qianbi@2x"] forState:UIControlStateNormal];
+//                [myEditButton addTarget:self action:@selector(clickMyEditButton) forControlEvents:UIControlEventTouchUpInside];
+//                [backImageView addSubview:myEditButton];
 
             if ([(NSArray *)resultDic[@"friend"] count] > 0) {
                 if (num == 1) {
@@ -1217,6 +1261,17 @@
 	
 	return [NSDate date]; // should return date data source was last changed
 	
+}
+
+
+#pragma mark - OHLabelDelegate
+-(BOOL)attributedLabel:(OHAttributedLabel*)attributedLabel shouldFollowLink:(NSTextCheckingResult*)linkInfo
+{
+    return YES;
+}
+-(UIColor*)colorForLink:(NSTextCheckingResult*)linkInfo underlineStyle:(int32_t*)underlineStyle
+{
+    return [UIColor colorWithRed:86/255.0f green:104/255.0f blue:154/255.0f alpha:1];
 }
 
 - (void)didReceiveMemoryWarning

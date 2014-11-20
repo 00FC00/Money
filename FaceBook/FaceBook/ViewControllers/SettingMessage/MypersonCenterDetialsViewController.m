@@ -230,7 +230,7 @@
     [backgroundScrollView addSubview:preferenceImageView];
     //投资偏好
     UILabel *preferenceLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 15/2, 160/2, 72/2)];
-    preferenceLabel.text = @"投资偏好：";
+    preferenceLabel.text = @"职务名称：";
     preferenceLabel.backgroundColor = [UIColor clearColor];
     preferenceLabel.textAlignment = NSTextAlignmentRight;
     preferenceLabel.font = [UIFont systemFontOfSize:15];

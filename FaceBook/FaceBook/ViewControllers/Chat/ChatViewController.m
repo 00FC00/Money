@@ -233,6 +233,15 @@
     }else{
         [cell.headImageView setImage:[UIImage imageNamed:@"lianpuqunchat@2x"]];
     }
+    
+    __weak typeof(self) bself = self;
+    [cell setHeaderViewtap:^(ChatViewCell *cell) {
+        MySweepViewController *mySweepVC = [[MySweepViewController alloc]init];
+        mySweepVC.friendIdString = recentlyObj.messageFaceId;
+        mySweepVC.groupIdString = @"0";
+        mySweepVC.groupTypeString = @"4";
+        [bself.navigationController pushViewController:mySweepVC animated:YES];
+    }];
    
     
     //当信息大于0，显示，否则不显示

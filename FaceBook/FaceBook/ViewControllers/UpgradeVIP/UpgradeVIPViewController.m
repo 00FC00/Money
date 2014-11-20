@@ -65,7 +65,7 @@
     }else{
         [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"navbeijingios6"] forBarMetrics:UIBarMetricsDefault];
     }
-    self.title = @"升级为VIP";
+    self.title = @"高级用户资格";
     self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
     
     UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];

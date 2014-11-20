@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "EGORefreshTableFooterView.h"
 #import "EGORefreshTableHeaderView.h"
-@interface FriendsCircleViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,UIActionSheetDelegate,UINavigationControllerDelegate,UIImagePickerControllerDelegate,UITextViewDelegate,EGORefreshTableDelegate>
+@interface FriendsCircleViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,UIActionSheetDelegate,UINavigationControllerDelegate,UIImagePickerControllerDelegate,UITextViewDelegate,EGORefreshTableDelegate,OHAttributedLabelDelegate>
 
 {
     UITableView *friendsCircleTableView;
