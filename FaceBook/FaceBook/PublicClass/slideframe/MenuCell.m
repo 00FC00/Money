@@ -32,7 +32,9 @@
     [self.contentView addSubview:titleLabel];
     
     //markImageView
-    markImageView = [[UIImageView alloc]initWithFrame:CGRectMake(22/2, 20/2, 50/2, 50/2)];
+//    markImageView = [[UIImageView alloc]initWithFrame:CGRectMake(22/2, 20/2, 50/2, 50/2)];
+    
+    markImageView = [[UIImageView alloc]initWithFrame:CGRectMake(22/2, 20/2 + 5, 28/2, 29/2)];
     markImageView.backgroundColor = [UIColor clearColor];
     [self.contentView addSubview:markImageView];
     

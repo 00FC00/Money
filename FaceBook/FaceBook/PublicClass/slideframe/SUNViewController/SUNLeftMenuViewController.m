@@ -490,20 +490,20 @@
             NSArray *moduleNameArray = [[NSArray alloc] init];
             moduleNameArray = resultDic[@"list"];
             
-            NSMutableArray *tempNameArr = [NSMutableArray array];
-            
-            for (NSString *name in moduleNameArray) {
-                
-                if ([name isEqualToString:@"朋友圈"] || [name isEqualToString:@"同乡校友"] ||[name isEqualToString:@"部落活动"]) {
-                    
-                }else
-                {
-                    [tempNameArr addObject:name];
-                }
-                
-            }
-            
-            moduleNameArray = tempNameArr;
+//            NSMutableArray *tempNameArr = [NSMutableArray array];
+//            
+//            for (NSString *name in moduleNameArray) {
+//                
+//                if ([name isEqualToString:@"朋友圈"] || [name isEqualToString:@"同乡校友"] ||[name isEqualToString:@"部落活动"]) {
+//                    
+//                }else
+//                {
+//                    [tempNameArr addObject:name];
+//                }
+//                
+//            }
+//            
+//            moduleNameArray = tempNameArr;
             
             NSMutableArray *moduleUserArray = [[NSMutableArray alloc] initWithCapacity:100];
             if ([[NSUserDefaults standardUserDefaults] objectForKey:@"ModuleMenu"] ) {
@@ -527,10 +527,10 @@
                     [dic setObject:@"lianxiren@2x" forKey:@"moduleImage"];
                 }
                 
-//                else if([moduleNameArray[i] isEqualToString:@"朋友圈"])
-//                {
-//                    [dic setObject:@"pengyouquan@2x" forKey:@"moduleImage"];
-//                }
+                else if([moduleNameArray[i] isEqualToString:@"朋友圈"])
+                {
+                    [dic setObject:@"pengyouquan@2x" forKey:@"moduleImage"];
+                }
                 
                 else if([moduleNameArray[i] isEqualToString:@"部落群"])
                 {
@@ -544,14 +544,14 @@
                     
                 }
                 
-//                else if([moduleNameArray[i] isEqualToString:@"部落活动"])
-//                {
-//                    [dic setObject:@"wodehuodong@2x" forKey:@"moduleImage"];
-//                }
-//                else if([moduleNameArray[i] isEqualToString:@"同乡校友"])
-//                {
-//                    [dic setObject:@"tongchenglaoxiang@2x" forKey:@"moduleImage"];
-//                }
+                else if([moduleNameArray[i] isEqualToString:@"部落活动"])
+                {
+                    [dic setObject:@"wodehuodong@2x" forKey:@"moduleImage"];
+                }
+                else if([moduleNameArray[i] isEqualToString:@"同乡校友"])
+                {
+                    [dic setObject:@"tongchenglaoxiang@2x" forKey:@"moduleImage"];
+                }
                 
                 else if([moduleNameArray[i] isEqualToString:@"部落消息"])
                 {
@@ -823,15 +823,6 @@
         
         
     }
-    
-    if (indexPath.row == 0) {
-        
-        NSLog(@"liaotian ?");
-        
-//        [cell.numberBackImageView setImage:[UIImage imageNamed:@"xinxishuliangbeijing@2x"]];
-//        cell.numberLabel.text = [NSString stringWithFormat:@"%@",recentlyObj.unReadNumber];
-    }
-    
     
     cell.titleLabel.text = menuArray[indexPath.row][@"moduleName"];
     [cell.markImageView setImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@",menuArray[indexPath.row][@"moduleImage"]]]];
