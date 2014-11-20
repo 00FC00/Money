@@ -894,6 +894,7 @@
         {
             [redPoint_chat setImage:[UIImage imageNamed:@"newRemind@2x"]];
         }
+        
     }];
     
     

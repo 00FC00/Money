@@ -833,9 +833,6 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(LLRequest);
     FMDBRecentlyContactsObject * recentlyObj = [[FMDBRecentlyContactsObject alloc] init];//
     recentlyObj.messageChatType = [NSNumber numberWithInt:chatType]; //
     
-    //接受消息就发通知--lcw
-    [[NSNotificationCenter defaultCenter]postNotificationName:NOTIFICATION_REMIND_NEW_MESSAGE object:nil];
-    
     //私聊
     if (chatType == 0) {
         
@@ -1156,6 +1153,9 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(LLRequest);
 
         
     }
+    
+    //接受消息就发通知--lcw
+    [[NSNotificationCenter defaultCenter]postNotificationName:NOTIFICATION_REMIND_NEW_MESSAGE object:nil];
     
 [[NSNotificationCenter defaultCenter] postNotificationName:FSHNewMessageNotifaction object:nil];
 
