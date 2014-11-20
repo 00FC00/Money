@@ -57,7 +57,10 @@
         //[[LLRequest sharedLLRequest] connect];
       SUNViewController *drawerController = ((AppDelegate*)[UIApplication sharedApplication].delegate).drawerController;
         
-        [self presentViewController:drawerController animated:YES completion:^{
+        UINavigationController *unvc = [[UINavigationController alloc]initWithRootViewController:drawerController];
+        unvc.navigationBarHidden = YES;
+        
+        [self presentViewController:unvc animated:YES completion:^{
             ;
         }];
         [[LLRequest sharedLLRequest] connect];

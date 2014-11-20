@@ -66,6 +66,20 @@
     return self;
 }
 
+-(void)viewWillAppear:(BOOL)animated
+{
+    self.navigationController.navigationBarHidden = NO;
+    
+    [super viewWillAppear:animated];
+}
+
+-(void)viewWillDisappear:(BOOL)animated
+{
+//    self.navigationController.navigationBarHidden = YES;
+    
+    [super viewWillDisappear:animated];
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -397,7 +411,11 @@
 #pragma mark - 返回
 - (void)backButtonClicked
 {
+    
+    
     [self.navigationController popViewControllerAnimated:YES];
+    
+    self.navigationController.navigationBarHidden = YES;
 }
 #pragma mark - 点击修改头像
 - (void)headButtonClicked

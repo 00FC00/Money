@@ -35,7 +35,7 @@
 
 @property (strong, nonatomic) ViewController *viewController;
 
-@property (strong ,nonatomic) UINavigationController *NAV;
+@property (strong ,nonatomic) UINavigationController *root_unvc;
 
 @property (retain, nonatomic) DDMenuController *menuController;
 

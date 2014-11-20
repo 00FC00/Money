@@ -27,6 +27,8 @@
     NSMutableDictionary *remindDic;
     UIImageView *redPoint;
     
+    UIImageView *redPoint_chat;//聊天 对应红按钮
+    
     UIImageView *markVipImageView;
     
     //广告背景
@@ -60,6 +62,8 @@
     UINavigationController *ContactPeopleNav;
     UINavigationController *FriendsCircleNav;
     UINavigationController *FaceBookGroupNav;
+    
+    UINavigationController *my_Unvc;
     
     UINavigationController *BusinessWallNav;
     UINavigationController *InformationMainNav;
