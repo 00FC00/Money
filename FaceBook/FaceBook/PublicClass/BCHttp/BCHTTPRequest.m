@@ -1637,7 +1637,7 @@
 //朋友圈列表△
 + (void)getFriendsOpenListWithPages:(NSInteger)page UsingSuccessBlock:(void (^)(BOOL isSuccess,NSDictionary*resultDic))successBlock
 {
-    NSString *stringURL = [NSString stringWithFormat:@"%@index.php?r=default/start/friendpenList&uid=%@&page=%ld",kMainUrlString,[self getUserId],(long)page];
+    NSString *stringURL = [NSString stringWithFormat:@"%@index.php?r=default/start/friendpenList&uid=%@&page=%ld&token=%@",kMainUrlString,[self getUserId],(long)page,[self getUserToken]];
     NSLog(@"朋友圈列表网址%@",stringURL);
     [self getDictionaryWithStringURL:stringURL usingSuccessBlock:^(NSDictionary *resultDictionary) {
         NSLog(@"朋友圈列表%@",resultDictionary);

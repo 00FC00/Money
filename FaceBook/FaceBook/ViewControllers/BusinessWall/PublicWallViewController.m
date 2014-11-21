@@ -248,7 +248,7 @@
         pcell.cutOffLineImageView.frame = CGRectMake(0,61, pcell.cellBackImageView.frame.size.width, 2/2);
         [pcell.cutOffLineImageView setImage:[UIImage imageNamed:@"shouyecellxian@2x"]];
         
-        pcell.markContentLabel.frame = CGRectMake(2,76,454/2,30/2);
+        pcell.markContentLabel.frame = CGRectMake(5,76,454/2,30/2);
         pcell.markContentLabel.text = dataArray[indexPath.row][@"title"];
         
         pcell.contectLabel.numberOfLines = 0;

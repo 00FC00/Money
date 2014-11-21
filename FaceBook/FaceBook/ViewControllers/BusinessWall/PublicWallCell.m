@@ -79,15 +79,15 @@
     _markContentLabel=[[UILabel alloc]initWithFrame:CGRectZero];
     _markContentLabel.backgroundColor = [UIColor clearColor];
     _markContentLabel.textAlignment = NSTextAlignmentLeft;
-    _markContentLabel.textColor = TEXT_COLOR;
-    _markContentLabel.font = [UIFont systemFontOfSize:15];
+    _markContentLabel.textColor = [UIColor blackColor];
+    _markContentLabel.font = [UIFont systemFontOfSize:16];
     [_cellBackImageView addSubview:_markContentLabel];
 
     
     //内容contectLabel;
     _contectLabel=[[UILabel alloc]init];
     _contectLabel.backgroundColor = [UIColor clearColor];
-    _contectLabel.textColor = [UIColor blackColor];
+    _contectLabel.textColor = [UIColor grayColor];
     _contectLabel.font = [UIFont systemFontOfSize:14];
     [_contectLabel setNumberOfLines:0];
     [_cellBackImageView addSubview:_contectLabel];

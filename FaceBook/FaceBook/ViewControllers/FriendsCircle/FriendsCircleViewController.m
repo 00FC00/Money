@@ -50,6 +50,8 @@
     //评论数组
     int commentHeight;
     NSMutableArray *commentArray;
+    ///赞数组
+    NSMutableArray * praiseArray;
     
     //输入框
     UIImageView *replyImageView;
@@ -63,6 +65,7 @@
     NSString *isPaim;
     
     OHAttributedLabel * test_label;
+    RTLabel * test_rtlabel;
 }
 @end
 
@@ -76,6 +79,7 @@
         pageNumber = 1;
         pictureArray = [[NSMutableArray alloc]initWithCapacity:200];
         commentArray = [[NSMutableArray alloc]initWithCapacity:300];
+        praiseArray = [[NSMutableArray alloc] initWithCapacity:300];
         isReplyMe = @"other";
         isPaim = [[NSString alloc]init];
     }
@@ -319,18 +323,6 @@
     CGFloat contectHeight;
     NSString *str1 = friendArray[indexPath.row][@"content"];
     
-//    CGSize size1;
-    //***********ios7的方法
-//    if ([[[UIDevice currentDevice] systemVersion] floatValue]>=7)
-//    {
-//        NSDictionary *attribute = @{NSFontAttributeName: [UIFont systemFontOfSize:15]};
-//        size1 = [str1 boundingRectWithSize:CGSizeMake(492/2, 1000) options: NSStringDrawingTruncatesLastVisibleLine | NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading attributes:attribute context:nil].size;
-//    }else
-//    {
-//        //***********ios6的方法
-//        size1 = [str1 sizeWithFont:[UIFont systemFontOfSize:15]constrainedToSize:CGSizeMake(492/2,1000) lineBreakMode:NSLineBreakByWordWrapping];
-//    }
-    
     if (!test_label)
     {
         test_label = [[OHAttributedLabel alloc]initWithFrame:CGRectMake(60,40,492/2,0)];
@@ -380,11 +372,45 @@
     {
         mycommentHeight = 0;
     }
+    
+    
+    ///赞高度
+    praiseArray = friendArray[indexPath.row][@"praises"];
+    if (praiseArray.count > 0)
+    {
+        if (commentArray.count == 0)
+        {
+            mycommentHeight = 5;
+        }else
+        {
+            mycommentHeight -= 19;
+        }
+        
+        NSString * praise_string = [self returnZanStringWith:nil WithTotalNum:nil];
+        
+        if (!test_rtlabel) {
+            test_rtlabel = [[RTLabel alloc] initWithFrame:CGRectMake(64,0,232,0)];
+            test_rtlabel.font = [UIFont systemFontOfSize:13];
+            test_rtlabel.lineBreakMode = NSLineBreakByCharWrapping;
+            test_rtlabel.lineSpacing = 2;
+            test_rtlabel.imageWidth = 15;
+            test_rtlabel.imageHeight = 15;
+            test_rtlabel.rt_color = @"#030303";
+        }else
+        {
+            test_rtlabel.frame = CGRectMake(64,0,232,0);
+        }
+        test_rtlabel.text = praise_string;
+        CGSize zanOptimusize = [test_rtlabel optimumSize];
+        
+        mycommentHeight += zanOptimusize.height+22;
+    }
+    
     if ([str1 length ]== 0) {
         
         return 49+picHeight+4+38/2+mycommentHeight+15;
     }
-    return 49+picHeight+contectHeight+mycommentHeight+15;
+    return 49+picHeight+contectHeight+mycommentHeight+20;
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -542,9 +568,9 @@
     [cell.lovesButton addTarget:self action:@selector(clickLovesButtonButton:) forControlEvents:UIControlEventTouchUpInside];
     
     //评论回复
-    
+//    AlbumInformationLikeHL@2x
     commentArray = friendArray[indexPath.row][@"comments"];
-    CGFloat commentHeight = 13;
+    commentHeight = 13;
     [cell.commentsBackImageView setImage:[[UIImage imageNamed:@"pinglunbeijing"]stretchableImageWithLeftCapWidth:100 topCapHeight:33]];
     
     for (UIView * sview in cell.commentsBackImageView.subviews) {
@@ -553,17 +579,52 @@
         }
     }
     
+    
+    ///赞
+    praiseArray = friendArray[indexPath.row][@"praises"];
+    if (praiseArray.count > 0)
+    {
+        NSString * praise_string = [self returnZanStringWith:nil WithTotalNum:nil];
+        CGRect praiseFrame = CGRectMake(5,11,232,15);
+        RTLabel * praise_label = [[RTLabel alloc] initWithFrame:praiseFrame];
+        praise_label.font = [UIFont systemFontOfSize:13];
+        praise_label.delegate = self;
+        praise_label.lineBreakMode = NSLineBreakByCharWrapping;
+        praise_label.lineSpacing = 2;
+        praise_label.imageWidth = 14;
+        praise_label.imageHeight = 14;
+        praise_label.text = praise_string;
+        praise_label.rt_color = @"#56689a";
+        [cell.commentsBackImageView addSubview:praise_label];
+        CGSize zanOptimusize = [praise_label optimumSize];
+        praiseFrame.size.height = zanOptimusize.height+5;
+        praise_label.frame = praiseFrame;
+        commentHeight += praiseFrame.size.height;
+        
+        if (commentArray.count > 0)
+        {
+            UIView * lineView = [[UIView alloc] initWithFrame:CGRectMake(0,11+praiseFrame.size.height+5,250,0.5)];
+            lineView.backgroundColor = RGBCOLOR(221,222,223);
+            [cell.commentsBackImageView addSubview:lineView];
+        }
+    }
+    
+    
     if (commentArray.count == 0) {
-        commentHeight = 0;
-        cell.commentsBackImageView.hidden = YES;
+        
+        if (praiseArray.count==0)
+        {
+            commentHeight = 0;
+            cell.commentsBackImageView.hidden = YES;
+        }
     }else
     {
+        commentHeight += 5;
         cell.commentsBackImageView.hidden = NO;
         //评论内容
         for (int h = 0; h<[commentArray count]; h++) {
             //名字
             
-//             NSString * commentString = [NSString stringWithFormat:@"<a href=\"fb://atSomeone@/%@\">%@</a> : %@",model.comment_uid,model.comment_username,model.comment_content];
             NSString *commentString = [[NSString alloc]init];
             if ([commentArray[h][@"to_name"] isEqualToString:commentArray[h][@"from_name"]]) {
                 
@@ -587,7 +648,7 @@
             [cell.commentsBackImageView addSubview:label];
             
             CGSize optimuSize = [label optimumSize];
-            labelFrame.size.height = optimuSize.height+2;
+            labelFrame.size.height = optimuSize.height+3;
             label.frame = labelFrame;
             commentHeight += optimuSize.height+3;
             
@@ -653,7 +714,7 @@
         }
     }
     
-    cell.commentsBackImageView.frame = CGRectMake(112/2, cell.operationButton.frame.origin.y+29,250, commentHeight+10);
+    cell.commentsBackImageView.frame = CGRectMake(112/2, cell.operationButton.frame.origin.y+29,250, commentHeight+5);
     cell.postDateTimeLabel.frame = CGRectMake(60,cell.operationButton.frame.origin.y,cell.postDateTimeLabel.frame.size.width,cell.postDateTimeLabel.frame.size.height);
     //竖线
    // cell.verticalLineImageView.frame = CGRectMake(45, cell.marksImageView.frame.origin.y+cell.marksImageView.frame.size.height,2,49+cell.photoBackImageView.frame.size.height+13+cell.messageLabel.frame.size.height+29+commentHeight+10-12-cell.marksImageView.frame.size.height+5);
@@ -739,8 +800,23 @@
 #pragma mark - 评论按钮
 - (void)clickCommentButton:(UIButton *)commentBtn
 {
-    businessID = friendArray[commentBtn.tag - 2000][@"id"];
-    isCellNumber = commentBtn.tag-2000;
+    for (int w = 0; w< friendArray.count; w++) {
+        
+        FriendsCircleCell *cell = (FriendsCircleCell*)[friendsCircleTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:w inSection:0]];
+        
+        if (cell.operationBackImageView.frame.size.width == 180) {
+            [cell.operationButton setTitle:@"隐藏" forState:UIControlStateNormal];
+            //                cell.operationBackImageView.hidden = YES;
+            [UIView animateWithDuration:0.3 animations:^{
+                cell.operationBackImageView.frame = CGRectMake(280,cell.operationBackImageView.frame.origin.y,0,40);
+            } completion:^(BOOL finished) {
+                
+            }];
+        }
+    }
+    
+    businessID = friendArray[commentBtn.tag - 7000][@"id"];
+    isCellNumber = commentBtn.tag-7000;
     isReplyMe = @"me";
     if ([commentBtn.titleLabel.text isEqualToString:@"隐"]) {
         [commentBtn setTitle:@"显" forState:UIControlStateNormal];
@@ -1324,6 +1400,24 @@
     mySweepVC.groupIdString = @"0";
     mySweepVC.groupTypeString = @"4";
     [self.navigationController pushViewController:mySweepVC animated:YES];
+}
+
+#pragma mark - 获取到点赞人的字符串
+-(NSString *)returnZanStringWith:(NSMutableArray *)array WithTotalNum:(NSString *)theCount
+{
+    NSString * zanString = [NSString stringWithFormat:@"<img src=\"AlbumInformationLikeHL.png\">     </img> "];
+    
+    for (int h = 0;h < praiseArray.count;h++)
+    {
+        if (h == 0) {
+            zanString = [zanString stringByAppendingFormat:@"<a href=\"%@\">%@</a>",praiseArray[h][@"uid"],praiseArray[h][@"nickname"]];
+        }else
+        {
+            zanString = [zanString stringByAppendingFormat:@"，<a href=\"%@\">%@</a>",praiseArray[h][@"uid"],praiseArray[h][@"nickname"]];
+        }
+    }
+    
+    return zanString;
 }
 
 - (void)didReceiveMemoryWarning

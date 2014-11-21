@@ -672,8 +672,8 @@
     
 	// set the root controller
     DDMenuController * rootController = ((AppDelegate*)[UIApplication sharedApplication].delegate).menuController;
-    
-    if ([menuArray[indexPath.row][@"moduleName"] isEqualToString:@"快捷访问"]) {
+    ///这里是快捷访问
+    if ([menuArray[indexPath.row][@"moduleName"] isEqualToString:@"朋友圈"]) {
         
         if (!quickAccessNav) {
             QuickAccessViewController *quickAccessViewController = [[QuickAccessViewController alloc] init];
@@ -718,7 +718,8 @@
         [self.mm_drawerController setCenterViewController:ContactPeopleNav withCloseAnimation:YES completion:nil];
         
         
-    }else if ([menuArray[indexPath.row][@"moduleName"] isEqualToString:@"朋友圈"]) {
+    }else if ([menuArray[indexPath.row][@"moduleName"] isEqualToString:@"快捷访问"]) ///这里是朋友圈
+    {
         if (!FriendsCircleNav) {
             FriendsCircleViewController *friendsCircleViewController = [[FriendsCircleViewController alloc] init];
             FriendsCircleNav = [[UINavigationController alloc] initWithRootViewController:friendsCircleViewController];
