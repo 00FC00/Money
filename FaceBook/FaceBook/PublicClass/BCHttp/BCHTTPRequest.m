@@ -1257,7 +1257,7 @@
 //快捷访问页面
 + (void)getTheQuickAccessListWithUsingSuccessBlock:(void (^)(BOOL isSuccess,NSDictionary*resultDic))successBlock
 {
-    NSString *stringURL = [NSString stringWithFormat:@"%@index.php?r=default/start/shortcutVisit&uid=%@",kMainUrlString,[self getUserId]];
+    NSString *stringURL = [NSString stringWithFormat:@"%@index.php?r=default/start/shortcutVisit&uid=%@&token=%@",kMainUrlString,[self getUserId],[self getUserToken]];
     NSLog(@"快捷访问页面网址%@",stringURL);
     [self getDictionaryWithStringURL:stringURL usingSuccessBlock:^(NSDictionary *resultDictionary) {
         NSLog(@"快捷访问页面%@",resultDictionary);
@@ -1280,7 +1280,7 @@
 //增加快捷访问
 + (void)AddTheMenuItemWithMenuName:(NSString *)menuName usingSuccessBlock:(void (^)(BOOL isSuccess,NSDictionary*resultDic))successBlock
 {
-    NSString *stringURL = [NSString stringWithFormat:@"%@index.php?r=default/start/addVisit&uid=%@&menu=%@&%@",kMainUrlString,[self getUserId],menuName,[self getUserToken]];
+    NSString *stringURL = [NSString stringWithFormat:@"%@index.php?r=default/start/addVisit&uid=%@&menu=%@&token=%@",kMainUrlString,[self getUserId],menuName,[self getUserToken]];
     NSLog(@"增加快捷访问网址%@",stringURL);
     [self getDictionaryWithStringURL:stringURL usingSuccessBlock:^(NSDictionary *resultDictionary) {
         NSLog(@"增加快捷访问%@",resultDictionary);
