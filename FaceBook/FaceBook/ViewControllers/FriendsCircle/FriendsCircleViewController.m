@@ -30,9 +30,11 @@
 #import "MMDrawerController.h"
 #import "UIViewController+MMDrawerController.h"
 #import "MySweepViewController.h"
+#import "LoadingIndicatorView.h"
 
 @interface FriendsCircleViewController ()<RTLabelDelegate>
 {
+    LoadingIndicatorView * loadview;
     //朋友圈背景
     UIImageView *backImageView;
     //头像
@@ -141,11 +143,14 @@
     
     [self.view addSubview:friendsCircleTableView];
     
+    loadview=[[LoadingIndicatorView alloc]initWithFrame:CGRectMake(0, 900, 320, 40)];
+    friendsCircleTableView.tableFooterView = loadview;
+    [loadview startLoading];
     //获取数据
     [self getData:pageNumber];
     
     [self createHeaderView];
-    [self performSelector:@selector(testFinishedLoadData) withObject:nil afterDelay:0.0f];
+//    [self performSelector:@selector(testFinishedLoadData) withObject:nil afterDelay:0.0f];
     
     
     
@@ -179,20 +184,7 @@
             replyImageView.frame = CGRectMake(0, self.view.frame.size.height, [[UIScreen mainScreen] bounds].size.width, 49);
         }];
         
-        for (int w = 0; w< friendArray.count; w++) {
-            
-            FriendsCircleCell *cell = (FriendsCircleCell*)[friendsCircleTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:w inSection:0]];
-            
-            if (cell.operationBackImageView.frame.size.width == 180) {
-                [cell.operationButton setTitle:@"隐藏" forState:UIControlStateNormal];
-//                cell.operationBackImageView.hidden = YES;
-                [UIView animateWithDuration:0.3 animations:^{
-                    cell.operationBackImageView.frame = CGRectMake(280,cell.operationBackImageView.frame.origin.y,0,40);
-                } completion:^(BOOL finished) {
-                    
-                }];
-            }
-        }
+        [self reloadoperationButton];
         
     }
 
@@ -584,6 +576,7 @@
     praiseArray = friendArray[indexPath.row][@"praises"];
     if (praiseArray.count > 0)
     {
+        cell.commentsBackImageView.hidden = NO;
         NSString * praise_string = [self returnZanStringWith:nil WithTotalNum:nil];
         CGRect praiseFrame = CGRectMake(5,11,232,15);
         RTLabel * praise_label = [[RTLabel alloc] initWithFrame:praiseFrame];
@@ -742,7 +735,7 @@
         NSLog(@"自己不能恢复自己");
     }else
     {
-        [self showMyTextFieldKeyBoard];
+        [self showMyTextFieldKeyBoardWithRow:(senders.tag-30000000)/1000];
     }
 }
 
@@ -764,7 +757,7 @@
         NSLog(@"自己不能恢复自己");
     }else
     {
-        [self showMyTextFieldKeyBoard];
+        [self showMyTextFieldKeyBoardWithRow:(senders.view.tag-30000000)/1000];
     }
 }
 
@@ -800,42 +793,30 @@
 #pragma mark - 评论按钮
 - (void)clickCommentButton:(UIButton *)commentBtn
 {
-    for (int w = 0; w< friendArray.count; w++) {
-        
-        FriendsCircleCell *cell = (FriendsCircleCell*)[friendsCircleTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:w inSection:0]];
-        
-        if (cell.operationBackImageView.frame.size.width == 180) {
-            [cell.operationButton setTitle:@"隐藏" forState:UIControlStateNormal];
-            //                cell.operationBackImageView.hidden = YES;
-            [UIView animateWithDuration:0.3 animations:^{
-                cell.operationBackImageView.frame = CGRectMake(280,cell.operationBackImageView.frame.origin.y,0,40);
-            } completion:^(BOOL finished) {
-                
-            }];
-        }
-    }
+    [self reloadoperationButton];
     
     businessID = friendArray[commentBtn.tag - 7000][@"id"];
     isCellNumber = commentBtn.tag-7000;
     isReplyMe = @"me";
-    if ([commentBtn.titleLabel.text isEqualToString:@"隐"]) {
-        [commentBtn setTitle:@"显" forState:UIControlStateNormal];
-        [self showMyTextFieldKeyBoard];
-        
-    }else if([commentBtn.titleLabel.text isEqualToString:@"显"]) {
-        [commentBtn setTitle:@"隐" forState:UIControlStateNormal];
-        [replyField resignFirstResponder];
-        [UIView animateWithDuration:0.3 animations:^{
-            replyImageView.frame = CGRectMake(0, self.view.frame.size.height, [[UIScreen mainScreen] bounds].size.width, 49);
-        }];
-        
-    }
-    
-    
+    [commentBtn setTitle:@"显" forState:UIControlStateNormal];
+    [self showMyTextFieldKeyBoardWithRow:commentBtn.tag-7000];
+//    if ([commentBtn.titleLabel.text isEqualToString:@"隐"]) {
+//        [commentBtn setTitle:@"显" forState:UIControlStateNormal];
+//        [self showMyTextFieldKeyBoardWithRow:commentBtn.tag-7000];
+//        
+//    }else if([commentBtn.titleLabel.text isEqualToString:@"显"]) {
+//        [commentBtn setTitle:@"隐" forState:UIControlStateNormal];
+//        [replyField resignFirstResponder];
+//        [UIView animateWithDuration:0.3 animations:^{
+//            replyImageView.frame = CGRectMake(0, self.view.frame.size.height, [[UIScreen mainScreen] bounds].size.width, 49);
+//        }];
+//    }
 }
+
 #pragma mark - 赞
 - (void)clickLovesButtonButton:(UIButton *)lovesbutton
 {
+    [self reloadoperationButton];
     NSString *myMark = [[NSString alloc]init];
     if ([lovesbutton.titleLabel.text isEqualToString:@"不赞"]) {
         [lovesbutton setBackgroundImage:[UIImage imageNamed:@"yi_zan_image"] forState:UIControlStateNormal];
@@ -850,12 +831,30 @@
     
     [BCHTTPRequest markTheFriendCircleLogWithLogID:friendArray[lovesbutton.tag - 9000][@"id"] WithStatus:myMark usingSuccessBlock:^(BOOL isSuccess, NSDictionary *resultDic) {
         if (isSuccess == YES) {
-            ;
+            [self getData:pageNumber];
         }
     }];
-    
-    
 }
+
+-(void)reloadoperationButton
+{
+    for (int w = 0; w< friendArray.count; w++) {
+        
+        FriendsCircleCell *cell = (FriendsCircleCell*)[friendsCircleTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:w inSection:0]];
+        
+        if (cell.operationBackImageView.frame.size.width == 180) {
+            [cell.operationButton setTitle:@"隐藏" forState:UIControlStateNormal];
+            //                cell.operationBackImageView.hidden = YES;
+//            [UIView animateWithDuration:0.3 animations:^{
+//                cell.operationBackImageView.frame = CGRectMake(280,cell.operationBackImageView.frame.origin.y,0,40);
+//            } completion:^(BOOL finished) {
+//                
+//            }];
+            cell.operationBackImageView.frame = CGRectMake(280,cell.operationBackImageView.frame.origin.y,0,40);
+        }
+    }
+}
+
 #pragma mark - 点击查看图片详情
 - (void)clickPicturesButton:(UIButton *)mySender
 {
@@ -944,8 +943,11 @@
 */
 }
 #pragma mark - 弹出键盘
-- (void)showMyTextFieldKeyBoard
+- (void)showMyTextFieldKeyBoardWithRow:(int )button
 {
+    NSIndexPath * indexPath = [NSIndexPath indexPathForRow:button inSection:0];
+    [friendsCircleTableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:NO];
+    
     if (replyImageView) {
         [replyImageView removeFromSuperview];
     }
@@ -1000,6 +1002,9 @@
 //    tapRecognizer.cancelsTouchesInView = NO;
 //    [self.view addGestureRecognizer:tapRecognizer];
 
+    [replyField becomeFirstResponder];
+    
+    
 }
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text;
 
@@ -1095,10 +1100,7 @@
                     
                     if([cell.commentButton.titleLabel.text isEqualToString:@"显"]) {
                         [cell.commentButton setTitle:@"隐" forState:UIControlStateNormal];
-                        
-                        
                     }
-                    
                 }
                 
             }else
@@ -1111,8 +1113,6 @@
                         [cell.commentButton setTitle:@"隐" forState:UIControlStateNormal];
                         
                         [friendArray[w][@"comments"] addObject:dic];
-                        
-                        
                     }
                     
                 }
@@ -1129,6 +1129,7 @@
 {
     //获取数据
     [BCHTTPRequest getFriendsOpenListWithPages:num UsingSuccessBlock:^(BOOL isSuccess, NSDictionary *resultDic) {
+        [loadview stopLoading:1];
             if (isSuccess == YES) {
                 
                 //朋友圈背景backImageView;
@@ -1192,11 +1193,17 @@
                 
                 [friendArray addObjectsFromArray:resultDic[@"friend"]];
                
+            }else
+            {
+                if (pageNumber != 1) {
+                    pageNumber--;
+                }
+                loadview.normalLabel.text = @"没有更多数据了";
             }
             
             [friendsCircleTableView reloadData];
             [self removeFooterView];
-            [self testFinishedLoadData];
+//            [self testFinishedLoadData];
         }
     }];
     
@@ -1224,7 +1231,7 @@
 -(void)testFinishedLoadData{
 	
     [self finishReloadingData];
-    [self setFooterView];
+//    [self setFooterView];
 }
 
 #pragma mark -
@@ -1328,8 +1335,8 @@
     
     [self getData:pageNumber];
     
-    [self removeFooterView];
-    [self testFinishedLoadData];
+//    [self removeFooterView];
+//    [self testFinishedLoadData];
     
 }
 
@@ -1349,10 +1356,27 @@
         [_refreshHeaderView egoRefreshScrollViewDidEndDragging:scrollView];
     }
 	
-	if (_refreshFooterView)
-	{
-        [_refreshFooterView egoRefreshScrollViewDidEndDragging:scrollView];
+//	if (_refreshFooterView)
+//	{
+//        [_refreshFooterView egoRefreshScrollViewDidEndDragging:scrollView];
+//    }
+    
+    
+    
+    if(scrollView.contentOffset.y > (scrollView.contentSize.height - scrollView.frame.size.height+40) && scrollView.contentOffset.y > 0)
+    {
+        if (loadview.normalLabel.hidden || [loadview.normalLabel.text isEqualToString:@"没有更多数据了"])
+        {
+            return;
+        }
+        
+        [loadview startLoading];
+        
+        pageNumber++;
+        
+        [self getData:pageNumber];
     }
+    
 }
 
 
