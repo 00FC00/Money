@@ -21,7 +21,10 @@
 //#import "DMCAlertCenter.h"
 //#import "BCBaseObject.h"
 
-#define kMainUrlString @"http://app.facebookchina.cn/"
+//#define kMainUrlString @"http://app.facebookchina.cn/"
+
+#define kMainUrlString @"http://app2.facebookchina.cn/"
+
 //#define kMainUrlString @"http://lianpu.bloveambition.com/"
 #define IS_IOS_7  [[[UIDevice currentDevice]systemVersion]floatValue]>=7.0
 

@@ -94,6 +94,23 @@
 {
     [BCHTTPRequest getTheQuickAccessListWithUsingSuccessBlock:^(BOOL isSuccess, NSDictionary *resultDic) {
         if (isSuccess == YES) {
+            
+            
+//            NSDictionary *dic = [resultDic objectForKey:@"list"];
+//            
+//            NSArray *moduleNameArray = [[NSArray alloc] init];
+//            
+//            if ([dic isKindOfClass:[NSDictionary class]]) {
+//                
+//                NSArray *values = [dic allValues];
+//                
+//                moduleNameArray = values;
+//            }
+            
+            //=============================
+            
+        
+            
             NSArray *moduleNameArray = [[NSArray alloc] init];
             moduleNameArray = resultDic[@"list"];
             
