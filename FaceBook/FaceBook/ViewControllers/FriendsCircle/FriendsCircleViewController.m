@@ -382,7 +382,7 @@
         
         if (!test_rtlabel) {
             test_rtlabel = [[RTLabel alloc] initWithFrame:CGRectMake(64,0,232,0)];
-            test_rtlabel.font = [UIFont systemFontOfSize:13];
+            test_rtlabel.font = [UIFont systemFontOfSize:14];
             test_rtlabel.lineBreakMode = NSLineBreakByCharWrapping;
             test_rtlabel.lineSpacing = 2;
             test_rtlabel.imageWidth = 15;
@@ -580,7 +580,7 @@
         NSString * praise_string = [self returnZanStringWith:nil WithTotalNum:nil];
         CGRect praiseFrame = CGRectMake(5,11,232,15);
         RTLabel * praise_label = [[RTLabel alloc] initWithFrame:praiseFrame];
-        praise_label.font = [UIFont systemFontOfSize:13];
+        praise_label.font = [UIFont systemFontOfSize:14];
         praise_label.delegate = self;
         praise_label.lineBreakMode = NSLineBreakByCharWrapping;
         praise_label.lineSpacing = 2;
@@ -972,7 +972,7 @@
     replyField.backgroundColor = [UIColor clearColor];
     replyField.delegate = self;
     replyField.font = [UIFont systemFontOfSize:14];
-    replyField.returnKeyType = UIReturnKeyDone;
+    replyField.returnKeyType = UIReturnKeySend;
     [replyImageView addSubview:replyField];
     
     //TextView占位符
@@ -1011,20 +1011,20 @@
 {
     if ([text isEqualToString:@"\n"]) {
         [textView resignFirstResponder];
-        [UIView animateWithDuration:0.3 animations:^{
-            replyImageView.frame = CGRectMake(0, self.view.frame.size.height, [[UIScreen mainScreen] bounds].size.width, 49);
-        }];
-        
-        for (int w = 0; w< friendArray.count; w++) {
-            
-            FriendsCircleCell *cell = (FriendsCircleCell*)[friendsCircleTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:w inSection:0]];
-            
-            if([cell.commentButton.titleLabel.text isEqualToString:@"显"]) {
-                [cell.commentButton setTitle:@"隐" forState:UIControlStateNormal];
-            }
-            
-        }
-        
+//        [UIView animateWithDuration:0.3 animations:^{
+//            replyImageView.frame = CGRectMake(0, self.view.frame.size.height, [[UIScreen mainScreen] bounds].size.width, 49);
+//        }];
+//        
+//        for (int w = 0; w< friendArray.count; w++) {
+//            
+//            FriendsCircleCell *cell = (FriendsCircleCell*)[friendsCircleTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:w inSection:0]];
+//            
+//            if([cell.commentButton.titleLabel.text isEqualToString:@"显"]) {
+//                [cell.commentButton setTitle:@"隐" forState:UIControlStateNormal];
+//            }
+//            
+//        }
+        [self clickReplyButton];
         
         return NO;
     }
@@ -1202,8 +1202,7 @@
             }
             
             [friendsCircleTableView reloadData];
-            [self removeFooterView];
-//            [self testFinishedLoadData];
+            [self testFinishedLoadData];
         }
     }];
     
@@ -1243,11 +1242,6 @@
     
 	if (_refreshHeaderView) {
         [_refreshHeaderView egoRefreshScrollViewDataSourceDidFinishedLoading:friendsCircleTableView];
-    }
-    
-    if (_refreshFooterView) {
-        [_refreshFooterView egoRefreshScrollViewDataSourceDidFinishedLoading:friendsCircleTableView];
-        [self setFooterView];
     }
     
     // overide, the actula reloading tableView operation and reseting position operation is done in the subclass

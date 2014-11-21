@@ -329,7 +329,7 @@ void RunDelegateDeallocCallback(void* refCon);
 	
     // Initialize a rectangular path.
 	CGMutablePathRef path = CGPathCreateMutable();
-	CGRect bounds = CGRectMake(0.0,0, self.frame.size.width, self.frame.size.height);
+	CGRect bounds = CGRectMake(0.0,-3, self.frame.size.width, self.frame.size.height);
 	CGPathAddRect(path, NULL, bounds);
 	
 	// Create the frame and draw it into the graphics context
@@ -420,7 +420,7 @@ void RunDelegateDeallocCallback(void* refCon);
 					
 					CGFloat button_width = primaryOffset2 - primaryOffset;
                     
-                    CGRect rectqqq = CGRectMake(primaryOffset+origin.x,origin.y - _lineSpacing,button_width,ascent+descent + _lineSpacing/2);
+                    CGRect rectqqq = CGRectMake(primaryOffset+origin.x,origin.y - _lineSpacing - 5,button_width,ascent+descent + _lineSpacing/2);
                     
                     if (self.currentSelectedButtonComponentIndex == linkableComponents.componentIndex)
                     {
