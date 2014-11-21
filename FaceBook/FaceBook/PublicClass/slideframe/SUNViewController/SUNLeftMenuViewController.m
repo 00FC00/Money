@@ -74,14 +74,7 @@
         [menuTableView reloadData];
     }
     
-    if ([BCHTTPRequest isLogin] == YES) {
-        [BCHTTPRequest CheckTheNewRemindMessageUsingSuccessBlock:^(BOOL isSuccess, NSDictionary *resultDic) {
-            if (isSuccess == YES) {
-                remindDic = [resultDic mutableCopy];
-                [[NSNotificationCenter defaultCenter] postNotificationName:@"remindNew" object:remindDic[@"nums"]];
-            }
-        }];
-    }
+    [self getUnread];//部落未读消息
     
     
     [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_REMIND_NEW_MESSAGE object:nil];
@@ -94,6 +87,20 @@
     //        globalVariable.meduleDic = nil;
     //
     //    }
+}
+
+#pragma mark - 获取部落未读消息
+
+- (void)getUnread
+{
+    if ([BCHTTPRequest isLogin] == YES) {
+        [BCHTTPRequest CheckTheNewRemindMessageUsingSuccessBlock:^(BOOL isSuccess, NSDictionary *resultDic) {
+            if (isSuccess == YES) {
+                remindDic = [resultDic mutableCopy];
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"remindNew" object:remindDic[@"nums"]];
+            }
+        }];
+    }
 }
 
 
@@ -153,7 +160,10 @@
     longPress.minimumPressDuration = 1.0;
     [menuTableView addGestureRecognizer:longPress];
     
+    //三秒轮训获取部落未读消息
     
+    NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:3.f target:self selector:@selector(getUnread) userInfo:nil repeats:YES];
+    [[NSRunLoop currentRunLoop]addTimer:timer forMode:NSRunLoopCommonModes];
     
 }
 

@@ -1280,7 +1280,7 @@
 //增加快捷访问
 + (void)AddTheMenuItemWithMenuName:(NSString *)menuName usingSuccessBlock:(void (^)(BOOL isSuccess,NSDictionary*resultDic))successBlock
 {
-    NSString *stringURL = [NSString stringWithFormat:@"%@index.php?r=default/start/addVisit&uid=%@&menu=%@",kMainUrlString,[self getUserId],menuName];
+    NSString *stringURL = [NSString stringWithFormat:@"%@index.php?r=default/start/addVisit&uid=%@&menu=%@&%@",kMainUrlString,[self getUserId],menuName,[self getUserToken]];
     NSLog(@"增加快捷访问网址%@",stringURL);
     [self getDictionaryWithStringURL:stringURL usingSuccessBlock:^(NSDictionary *resultDictionary) {
         NSLog(@"增加快捷访问%@",resultDictionary);
@@ -4417,7 +4417,7 @@
     
     NSLog(@"检测是否有部落消息URL%@",stringURL);
     [self getDictionaryWithStringURL:stringURL usingSuccessBlock:^(NSDictionary *resultDictionary) {
-        NSLog(@"检测是否有部落消息%@",resultDictionary);
+//        NSLog(@"检测是否有部落消息%@",resultDictionary);
         
         if ([[resultDictionary objectForKey:@"state"] integerValue] == 1) {
             
