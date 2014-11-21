@@ -71,33 +71,37 @@
 
     
     //底部按钮背景
-    UIImageView *bottomImageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, IS_IOS_7?self.view.frame.size.height-64-98/2:self.view.frame.size.height-44-98/2, self.view.frame.size.width, 98/2)];
+    UIImageView *bottomImageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, IS_IOS_7?self.view.frame.size.height-64-42:self.view.frame.size.height-44-42, self.view.frame.size.width,42)];
     bottomImageView.backgroundColor = [UIColor clearColor];
-    [bottomImageView setImage:[UIImage imageNamed:@"yewuqiangbeijing@2x"]];
+    [bottomImageView setImage:[UIImage imageNamed:@"buluoqiang_back_image"]];
     bottomImageView.userInteractionEnabled = YES;
     [self.view bringSubviewToFront:bottomImageView];
     [self.view addSubview:bottomImageView];
     
     //公共墙
     publicWallButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    publicWallButton.frame =CGRectMake(34, 20/2, 132/2, 62/2);
+    publicWallButton.frame =CGRectMake(29,16,45,22);
     publicWallButton.backgroundColor = [UIColor clearColor];
-    [publicWallButton setBackgroundImage:[UIImage imageNamed:@"gonggongqiang2@2x"] forState:UIControlStateNormal];
+    [publicWallButton setBackgroundImage:[UIImage imageNamed:@"buluoqiang_anniu_image"] forState:UIControlStateNormal];
+    [publicWallButton setTitle:@"公共墙" forState:UIControlStateNormal];
+    publicWallButton.titleLabel.font = [UIFont systemFontOfSize:13];
     [publicWallButton addTarget:self action:@selector(clickPublicButton) forControlEvents:UIControlEventTouchUpInside];
     [bottomImageView addSubview:publicWallButton];
     
     //我的墙
     myWallButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    myWallButton.frame =CGRectMake(438/2, 20/2, 132/2, 62/2);
+    myWallButton.frame =CGRectMake(242,16,45,22);
     myWallButton.backgroundColor = [UIColor clearColor];
-    [myWallButton setBackgroundImage:[UIImage imageNamed:@"wodeqiang1@2x"] forState:UIControlStateNormal];
+    [myWallButton setBackgroundImage:[UIImage imageNamed:@"buluoqiang_anniu_image"] forState:UIControlStateNormal];
+    [myWallButton setTitle:@"我的墙" forState:UIControlStateNormal];
+    myWallButton.titleLabel.font = [UIFont systemFontOfSize:13];
     [myWallButton addTarget:self action:@selector(clickMyWallButton) forControlEvents:UIControlEventTouchUpInside];
     [bottomImageView addSubview:myWallButton];
     
     //编辑按钮
     UIButton * videoButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [videoButton setImage:[UIImage imageNamed:@"bianjifasong@2x"] forState:UIControlStateNormal];
-    [videoButton setFrame:CGRectMake(254/2, -35/2, 132.0/2, 132.0/2)];
+    [videoButton setImage:[UIImage imageNamed:@"buluoqiang_write_image"] forState:UIControlStateNormal];
+    [videoButton setFrame:CGRectMake(145,8,30,30)];
    
     [videoButton addTarget:self action:@selector(videoButtonClicked) forControlEvents:UIControlEventTouchUpInside];
     [bottomImageView addSubview:videoButton];
@@ -105,7 +109,7 @@
     
     //默认页面
     publicWallMainVC=[[PublicWallViewController alloc]init];
-    publicWallMainVC.view.frame=CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width , [UIScreen mainScreen].bounds.size.height-64);
+    publicWallMainVC.view.frame=CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width , [UIScreen mainScreen].bounds.size.height);
     [self addChildViewController:publicWallMainVC];
     [self.view addSubview:publicWallMainVC.view];
     [self.view sendSubviewToBack:publicWallMainVC.view];
@@ -151,8 +155,8 @@
 - (void)clickPublicButton
 {
     self.title = @"公共墙";
-    [publicWallButton setBackgroundImage:[UIImage imageNamed:@"gonggongqiang2@2x"] forState:UIControlStateNormal];
-    [myWallButton setBackgroundImage:[UIImage imageNamed:@"wodeqiang1@2x"] forState:UIControlStateNormal];
+//    [publicWallButton setBackgroundImage:[UIImage imageNamed:@"gonggongqiang2@2x"] forState:UIControlStateNormal];
+//    [myWallButton setBackgroundImage:[UIImage imageNamed:@"wodeqiang1@2x"] forState:UIControlStateNormal];
     
     if (publicWallMainVC) {
         publicWallMainVC.view.hidden=NO;
@@ -164,8 +168,8 @@
 - (void)clickMyWallButton
 {
     self.title = @"我的墙";
-    [publicWallButton setBackgroundImage:[UIImage imageNamed:@"gonggong1@2x"] forState:UIControlStateNormal];
-    [myWallButton setBackgroundImage:[UIImage imageNamed:@"wodeqiang2@2x"] forState:UIControlStateNormal];
+//    [publicWallButton setBackgroundImage:[UIImage imageNamed:@"gonggong1@2x"] forState:UIControlStateNormal];
+//    [myWallButton setBackgroundImage:[UIImage imageNamed:@"wodeqiang2@2x"] forState:UIControlStateNormal];
     
     if (myWallMainVC) {
         publicWallMainVC.view.hidden=YES;
@@ -173,8 +177,7 @@
     }else
     {
         myWallMainVC=[[MyWallViewController alloc]init];
-        myWallMainVC.view.frame=CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width , [UIScreen mainScreen].bounds.size.height-64);
-        [self addChildViewController:myWallMainVC];
+        myWallMainVC.view.frame=CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width , [UIScreen mainScreen].bounds.size.height);
         [self.view addSubview:myWallMainVC.view];
         [self.view sendSubviewToBack:myWallMainVC.view];
         publicWallMainVC.view.hidden=YES;

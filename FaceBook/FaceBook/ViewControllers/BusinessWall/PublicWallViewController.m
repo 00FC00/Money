@@ -39,17 +39,18 @@
     self.view.backgroundColor = [UIColor colorWithRed:219.0f/255.0f green:219.0f/255.0f blue:219.0f/255.0f alpha:1.0];
     
     //上方的工具栏
-    UIImageView *topBackImageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 320, 46)];
-    topBackImageView.backgroundColor = [UIColor colorWithRed:219.0f/255.0f green:219.0f/255.0f blue:219.0f/255.0f alpha:1.0];
+    UIImageView *topBackImageView = [[UIImageView alloc]initWithFrame:CGRectMake(10,0,300, 46)];
+    topBackImageView.image = [UIImage imageNamed:@"buluoqiang_tool_back_image"];;
     topBackImageView.userInteractionEnabled = YES;
     [self.view addSubview:topBackImageView];
     
     topToolTableView  = [[UITableView alloc] init];
     topToolTableView.backgroundColor = [UIColor whiteColor];
+    topToolTableView.separatorColor = RGBCOLOR(153,153,153);
     [topToolTableView.layer setAnchorPoint:CGPointMake(0.0, 0.0)];
     topToolTableView.transform = CGAffineTransformMakeRotation(M_PI/-2);
     topToolTableView.showsVerticalScrollIndicator = NO;
-    topToolTableView.frame = CGRectMake(10, 41, 300, 36);
+    topToolTableView.frame = CGRectMake(1, 41,298, 36);
     topToolTableView.rowHeight = 100.0;
     topToolTableView.tag = 2001;
     topToolTableView.delegate = self;
@@ -61,7 +62,7 @@
     }
     
     //下方的数据表
-    publicWallTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 46, 320, [[UIScreen mainScreen] bounds].size.height-64-97/2-46) style:UITableViewStylePlain];
+    publicWallTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 46, 320, [[UIScreen mainScreen] bounds].size.height-64-46) style:UITableViewStylePlain];
     publicWallTableView.backgroundColor = [UIColor clearColor];
     publicWallTableView.delegate = self;
     publicWallTableView.dataSource = self;
@@ -160,7 +161,7 @@
         size1 = [str1 sizeWithFont:[UIFont systemFontOfSize:14]constrainedToSize:CGSizeMake(566/2,140) lineBreakMode:NSLineBreakByWordWrapping];
             }
 
-        return 135+size1.height+13;
+        return 110+size1.height+13;
         
     }else
     {
@@ -186,18 +187,14 @@
         if (cell == nil) {
             cell = [[TopToolCell alloc] initWithStyle:UITableViewCellStyleDefault
                                       reuseIdentifier:CellIdentifier];
-            cell.selectedBackgroundView.backgroundColor = [UIColor grayColor];
+            cell.selectedBackgroundView.backgroundColor = [UIColor whiteColor];
             cell.contentView.transform = CGAffineTransformMakeRotation(M_PI / 2);
             cell.markTitleLabel.frame = CGRectMake(0, 5, 100, 26);
             cell.markTitleLabel.textAlignment = NSTextAlignmentCenter;
             cell.markTitleLabel.backgroundColor = [UIColor clearColor];
-            cell.markTitleLabel.highlightedTextColor = [UIColor whiteColor];
-            
+//            cell.markTitleLabel.highlightedTextColor = [UIColor whiteColor];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
-        
-        
-        
-        
         
         cell.markTitleLabel.text = topToolArray[indexPath.row][@"name"];
         return cell;
@@ -229,28 +226,29 @@
         
         
         //[pcell.headImageView setImage:[UIImage imageNamed:imageStr]];
-        pcell.headImageView.frame = CGRectMake(10, 6, 102/2, 102/2);
+        pcell.headImageView.frame = CGRectMake(0,0,61,61);
         [pcell.headImageView setImageWithURL:[NSURL URLWithString:dataArray[indexPath.row][@"user_logo"]] placeholderImage:[UIImage imageNamed:@""]];
         
-        pcell.titleLabel.frame = CGRectMake(134/2, 20/2, 454/2, 30/2);
+        pcell.titleLabel.frame = CGRectMake(73, 20/2, 454/2, 30/2);
         pcell.titleLabel.text = dataArray[indexPath.row][@"user_nickname"];
         
-        pcell.companyLabel.frame = CGRectMake(134/2, pcell.titleLabel.frame.origin.y+pcell.titleLabel.frame.size.height+7, 454/2, 28/2);
+        pcell.companyLabel.frame = CGRectMake(73, pcell.titleLabel.frame.origin.y+pcell.titleLabel.frame.size.height+10, 454/2, 28/2);
         pcell.companyLabel.text = dataArray[indexPath.row][@"company"];
         
-        pcell.departmentLabel.frame = CGRectMake(134/2, pcell.companyLabel.frame.origin.y+pcell.companyLabel.frame.size.height+3, 454/2, 26/2);
-        pcell.departmentLabel.text = dataArray[indexPath.row][@"department"];
+//        pcell.departmentLabel.frame = CGRectMake(134/2, pcell.companyLabel.frame.origin.y+pcell.companyLabel.frame.size.height+3, 454/2, 26/2);
+//        pcell.departmentLabel.text = dataArray[indexPath.row][@"department"];
         
-        pcell.numberLabel.frame = CGRectMake(134/2, pcell.departmentLabel.frame.origin.y+pcell.departmentLabel.frame.size.height+2, 454/2, 28/2);
-        pcell.numberLabel.text = [NSString stringWithFormat:@"%@人已认证ta的身份",dataArray[indexPath.row][@"accept_number"]];
-        
-        pcell.addressLabel.frame = CGRectMake(134/2, pcell.numberLabel.frame.origin.y+pcell.numberLabel.frame.size.height+2, 454/2, 28/2);
+//        pcell.numberLabel.frame = CGRectMake(134/2, pcell.departmentLabel.frame.origin.y+pcell.departmentLabel.frame.size.height+2, 454/2, 28/2);
+//        pcell.numberLabel.text = [NSString stringWithFormat:@"%@人已认证ta的身份",dataArray[indexPath.row][@"accept_number"]];
+        ///计算名字长度
+        CGSize titleSize = [pcell.titleLabel.text sizeWithFont:[UIFont systemFontOfSize:15] constrainedToSize:CGSizeMake(MAXFLOAT, 30)];
+        pcell.addressLabel.frame = CGRectMake(titleSize.width+20+73,10,454/2,32/2);
         pcell.addressLabel.text = dataArray[indexPath.row][@"work_city"];
         
-        pcell.cutOffLineImageView.frame = CGRectMake(0, 206/2, pcell.cellBackImageView.frame.size.width, 2/2);
+        pcell.cutOffLineImageView.frame = CGRectMake(0,61, pcell.cellBackImageView.frame.size.width, 2/2);
         [pcell.cutOffLineImageView setImage:[UIImage imageNamed:@"shouyecellxian@2x"]];
         
-        pcell.markContentLabel.frame = CGRectMake(20/2, pcell.addressLabel.frame.origin.y+pcell.addressLabel.frame.size.height+15, 454/2, 30/2);
+        pcell.markContentLabel.frame = CGRectMake(2,76,454/2,30/2);
         pcell.markContentLabel.text = dataArray[indexPath.row][@"title"];
         
         pcell.contectLabel.numberOfLines = 0;

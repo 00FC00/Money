@@ -20,9 +20,9 @@
 //公司
 @property (strong, nonatomic) UILabel *companyLabel;
 //部门
-@property (strong, nonatomic) UILabel *departmentLabel;
+//@property (strong, nonatomic) UILabel *departmentLabel;
 //认可
-@property (strong, nonatomic) UILabel *numberLabel;
+//@property (strong, nonatomic) UILabel *numberLabel;
 //地点
 @property (strong, nonatomic) UILabel *addressLabel;
 //标记字段

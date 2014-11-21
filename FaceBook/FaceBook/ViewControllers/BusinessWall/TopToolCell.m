@@ -33,9 +33,9 @@
     
     _markTitleLabel = [[UILabel alloc]init];
     _markTitleLabel.backgroundColor= [UIColor clearColor];
-    _markTitleLabel.font = [UIFont systemFontOfSize:18];
+    _markTitleLabel.font = [UIFont boldSystemFontOfSize:16];
     _markTitleLabel.textAlignment = NSTextAlignmentCenter;
-    _markTitleLabel.textColor = [UIColor colorWithRed:181.0f/255.0f green:201.0f/255.0f blue:237.0f/255.0f alpha:1.0];
+    _markTitleLabel.textColor = [UIColor blackColor];
     //_markTitleLabel.transform = CGAffineTransformMakeRotation(M_PI/2);
     [self.contentView addSubview:_markTitleLabel];
 }

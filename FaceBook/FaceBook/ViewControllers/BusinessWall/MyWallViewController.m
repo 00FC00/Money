@@ -38,7 +38,7 @@
     self.view.backgroundColor = [UIColor colorWithRed:219.0f/255.0f green:219.0f/255.0f blue:219.0f/255.0f alpha:1.0];
     
     //下方的数据表
-    myWallTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, 320, [[UIScreen mainScreen] bounds].size.height-64-98/2) style:UITableViewStylePlain];
+    myWallTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, 320, [[UIScreen mainScreen] bounds].size.height-64) style:UITableViewStylePlain];
     myWallTableView.backgroundColor = [UIColor clearColor];
     myWallTableView.delegate = self;
     myWallTableView.dataSource = self;
@@ -89,7 +89,7 @@
         size1 = [str1 sizeWithFont:[UIFont systemFontOfSize:14]constrainedToSize:CGSizeMake(566/2,140) lineBreakMode:NSLineBreakByWordWrapping];
     }
     
-    return 135+size1.height+13;
+    return 110+size1.height+13;
 
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
@@ -128,25 +128,26 @@
     pcell.headImageView.frame = CGRectMake(10, 6, 102/2, 102/2);
     [pcell.headImageView setImageWithURL:[NSURL URLWithString:myWallArray[indexPath.row][@"user_logo"]] placeholderImage:[UIImage imageNamed:@""]];
     
-    pcell.titleLabel.frame = CGRectMake(134/2, 20/2, 454/2, 30/2);
+    pcell.titleLabel.frame = CGRectMake(73, 20/2, 454/2, 30/2);
     pcell.titleLabel.text = myWallArray[indexPath.row][@"user_nickname"];
     
-    pcell.companyLabel.frame = CGRectMake(134/2, pcell.titleLabel.frame.origin.y+pcell.titleLabel.frame.size.height+7, 454/2, 28/2);
+    pcell.companyLabel.frame = CGRectMake(73, pcell.titleLabel.frame.origin.y+pcell.titleLabel.frame.size.height+10, 454/2, 28/2);
     pcell.companyLabel.text = myWallArray[indexPath.row][@"company"];
     
-    pcell.departmentLabel.frame = CGRectMake(134/2, pcell.companyLabel.frame.origin.y+pcell.companyLabel.frame.size.height+3, 454/2, 26/2);
-    pcell.departmentLabel.text = myWallArray[indexPath.row][@"department"];
+//    pcell.departmentLabel.frame = CGRectMake(134/2, pcell.companyLabel.frame.origin.y+pcell.companyLabel.frame.size.height+3, 454/2, 26/2);
+//    pcell.departmentLabel.text = myWallArray[indexPath.row][@"department"];
+//    
+//    pcell.numberLabel.frame = CGRectMake(134/2, pcell.departmentLabel.frame.origin.y+pcell.departmentLabel.frame.size.height+2, 454/2, 28/2);
+//    pcell.numberLabel.text = [NSString stringWithFormat:@"%@人已认证ta的身份",myWallArray[indexPath.row][@"accept_number"]];
     
-    pcell.numberLabel.frame = CGRectMake(134/2, pcell.departmentLabel.frame.origin.y+pcell.departmentLabel.frame.size.height+2, 454/2, 28/2);
-    pcell.numberLabel.text = [NSString stringWithFormat:@"%@人已认证ta的身份",myWallArray[indexPath.row][@"accept_number"]];
-    
-    pcell.addressLabel.frame = CGRectMake(134/2, pcell.numberLabel.frame.origin.y+pcell.numberLabel.frame.size.height+2, 454/2, 28/2);
+    CGSize titleSize = [pcell.companyLabel.text sizeWithFont:[UIFont systemFontOfSize:15] constrainedToSize:CGSizeMake(MAXFLOAT, 30)];
+    pcell.addressLabel.frame = CGRectMake(titleSize.width+20+73,10,454/2,32/2);
     pcell.addressLabel.text = myWallArray[indexPath.row][@"work_city"];
     
-    pcell.cutOffLineImageView.frame = CGRectMake(0, 206/2, pcell.cellBackImageView.frame.size.width, 2/2);
+    pcell.cutOffLineImageView.frame = CGRectMake(0,61, pcell.cellBackImageView.frame.size.width, 2/2);
     [pcell.cutOffLineImageView setImage:[UIImage imageNamed:@"shouyecellxian@2x"]];
     
-    pcell.markContentLabel.frame = CGRectMake(20/2, pcell.addressLabel.frame.origin.y+pcell.addressLabel.frame.size.height+15, 454/2, 30/2);
+    pcell.markContentLabel.frame = CGRectMake(2,76,454/2,30/2);
     pcell.markContentLabel.text = myWallArray[indexPath.row][@"title"];
     
     pcell.contectLabel.numberOfLines = 0;

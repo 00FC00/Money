@@ -7,6 +7,7 @@
 //
 
 #import "PublicWallCell.h"
+#define TEXT_COLOR RGBCOLOR(13,92,221)
 
 @implementation PublicWallCell
 
@@ -38,7 +39,7 @@
     _titleLabel=[[UILabel alloc]init];
     _titleLabel.backgroundColor = [UIColor clearColor];
     _titleLabel.textAlignment = NSTextAlignmentLeft;
-    _titleLabel.textColor = [UIColor blackColor];
+    _titleLabel.textColor = TEXT_COLOR;
     _titleLabel.font = [UIFont systemFontOfSize:15];
     [_cellBackImageView addSubview:_titleLabel];
     
@@ -46,31 +47,31 @@
     _companyLabel=[[UILabel alloc]initWithFrame:CGRectZero];
     _companyLabel.backgroundColor = [UIColor clearColor];
     _companyLabel.textAlignment = NSTextAlignmentLeft;
-    _companyLabel.textColor = [UIColor blackColor];
+    _companyLabel.textColor = TEXT_COLOR;
     _companyLabel.font = [UIFont systemFontOfSize:13];
     [_cellBackImageView addSubview:_companyLabel];
 
     //部门departmentLabel;
-    _departmentLabel=[[UILabel alloc]initWithFrame:CGRectZero];
-    _departmentLabel.backgroundColor = [UIColor clearColor];
-    _departmentLabel.textAlignment = NSTextAlignmentLeft;
-    _departmentLabel.textColor = [UIColor blackColor];
-    _departmentLabel.font = [UIFont systemFontOfSize:13];
-    [_cellBackImageView addSubview:_departmentLabel];
-    
-    //认可numberLabel;
-    _numberLabel=[[UILabel alloc]initWithFrame:CGRectZero];
-    _numberLabel.backgroundColor = [UIColor clearColor];
-    _numberLabel.textAlignment = NSTextAlignmentLeft;
-    _numberLabel.textColor = [UIColor blackColor];
-    _numberLabel.font = [UIFont systemFontOfSize:13];
-    [_cellBackImageView addSubview:_numberLabel];
+//    _departmentLabel=[[UILabel alloc]initWithFrame:CGRectZero];
+//    _departmentLabel.backgroundColor = [UIColor clearColor];
+//    _departmentLabel.textAlignment = NSTextAlignmentLeft;
+//    _departmentLabel.textColor = [UIColor blackColor];
+//    _departmentLabel.font = [UIFont systemFontOfSize:13];
+//    [_cellBackImageView addSubview:_departmentLabel];
+//    
+//    //认可numberLabel;
+//    _numberLabel=[[UILabel alloc]initWithFrame:CGRectZero];
+//    _numberLabel.backgroundColor = [UIColor clearColor];
+//    _numberLabel.textAlignment = NSTextAlignmentLeft;
+//    _numberLabel.textColor = [UIColor blackColor];
+//    _numberLabel.font = [UIFont systemFontOfSize:13];
+//    [_cellBackImageView addSubview:_numberLabel];
 
     //地点addressLabel;
     _addressLabel=[[UILabel alloc]initWithFrame:CGRectZero];
     _addressLabel.backgroundColor = [UIColor clearColor];
     _addressLabel.textAlignment = NSTextAlignmentLeft;
-    _addressLabel.textColor = [UIColor blackColor];
+    _addressLabel.textColor = TEXT_COLOR;
     _addressLabel.font = [UIFont systemFontOfSize:13];
     [_cellBackImageView addSubview:_addressLabel];
     
@@ -78,7 +79,7 @@
     _markContentLabel=[[UILabel alloc]initWithFrame:CGRectZero];
     _markContentLabel.backgroundColor = [UIColor clearColor];
     _markContentLabel.textAlignment = NSTextAlignmentLeft;
-    _markContentLabel.textColor = [UIColor blackColor];
+    _markContentLabel.textColor = TEXT_COLOR;
     _markContentLabel.font = [UIFont systemFontOfSize:15];
     [_cellBackImageView addSubview:_markContentLabel];
 
