@@ -2,38 +2,4 @@
 <Bucket
    type = "0"
    version = "2.0">
-   <Breakpoints>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "FaceBook/ViewControllers/LoginAndRegister/LoginViewController.m"
-            timestampString = "438183165.211854"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "155"
-            endingLineNumber = "155"
-            landmarkName = "-clickLoginButton"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "FaceBook/ViewControllers/LoginAndRegister/LoginViewController.m"
-            timestampString = "438183167.428727"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "163"
-            endingLineNumber = "163"
-            landmarkName = "-clickLoginButton"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-   </Breakpoints>
 </Bucket>

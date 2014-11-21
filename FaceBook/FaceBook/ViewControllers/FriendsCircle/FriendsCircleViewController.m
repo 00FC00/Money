@@ -25,13 +25,13 @@
 //#import "UIImageView+MJWebCache.h"
 #import "MJPhotoBrowser.h"
 #import "MJPhoto.h"
-
+#import "RTLabel.h"
 #import "SUNViewController.h"
 #import "MMDrawerController.h"
 #import "UIViewController+MMDrawerController.h"
 #import "MySweepViewController.h"
 
-@interface FriendsCircleViewController ()
+@interface FriendsCircleViewController ()<RTLabelDelegate>
 {
     //朋友圈背景
     UIImageView *backImageView;
@@ -562,16 +562,40 @@
         //评论内容
         for (int h = 0; h<[commentArray count]; h++) {
             //名字
+            
+//             NSString * commentString = [NSString stringWithFormat:@"<a href=\"fb://atSomeone@/%@\">%@</a> : %@",model.comment_uid,model.comment_username,model.comment_content];
             NSString *commentString = [[NSString alloc]init];
             if ([commentArray[h][@"to_name"] isEqualToString:commentArray[h][@"from_name"]]) {
                 
-                commentString = [NSString stringWithFormat:@"%@:%@",commentArray[h][@"from_name"],commentArray[h][@"content"]];
+                commentString = [NSString stringWithFormat:@"<a href=\"%@\">%@</a>:%@",commentArray[h][@"from_id"],commentArray[h][@"from_name"],commentArray[h][@"content"]];
                 
             }else
             {
-                
-                commentString = [NSString stringWithFormat:@"%@回复%@:%@",commentArray[h][@"from_name"],commentArray[h][@"to_name"],commentArray[h][@"content"]];
+                commentString = [NSString stringWithFormat:@"<a href=\"%@\">%@</a>回复<a href=\"%@\">%@</a>:%@",commentArray[h][@"from_id"],commentArray[h][@"from_name"],commentArray[h][@"to_id"],commentArray[h][@"to_name"],commentArray[h][@"content"]];
             }
+            
+            CGRect labelFrame = CGRectMake(10,commentHeight,232,0);
+            RTLabel * label = [[RTLabel alloc] initWithFrame:labelFrame];
+            label.text = commentString;
+            label.delegate = self;
+            label.lineSpacing = 2;
+            label.tag = 30000000+1000*(indexPath.row)+h;
+            label.rt_color = @"#576a9a";
+            label.textColor = RGBCOLOR(3,3,3);
+            label.backgroundColor = [UIColor clearColor];
+            label.font = [UIFont systemFontOfSize:14];
+            [cell.commentsBackImageView addSubview:label];
+            
+            CGSize optimuSize = [label optimumSize];
+            labelFrame.size.height = optimuSize.height+2;
+            label.frame = labelFrame;
+            commentHeight += optimuSize.height+3;
+            
+            UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(commentLabelTap:)];
+            [label addGestureRecognizer:tap];
+            
+            
+            /*
             
             NSMutableAttributedString *attrTitle = [[NSMutableAttributedString alloc] initWithString:commentString];
             // NSString *commentString = [NSString stringWithFormat:@"%@：%@",myArray[i][@"uname"],myArray[i][@"content"]];
@@ -625,12 +649,9 @@
             
             
             commentHeight += commentSize.height;
-            
+            */
         }
-        
-        
     }
-    
     
     cell.commentsBackImageView.frame = CGRectMake(112/2, cell.operationButton.frame.origin.y+29,250, commentHeight+10);
     cell.postDateTimeLabel.frame = CGRectMake(60,cell.operationButton.frame.origin.y,cell.postDateTimeLabel.frame.size.width,cell.postDateTimeLabel.frame.size.height);
@@ -662,9 +683,30 @@
     {
         [self showMyTextFieldKeyBoard];
     }
-    
-    
 }
+
+-(void)commentLabelTap:(UITapGestureRecognizer *)senders
+{
+    NSLog(@"------>%d",senders.view.tag);
+    isReplyMe = @"other";
+    isCellNumber = (senders.view.tag-30000000)/1000;
+    NSLog(@"%d",isCellNumber);
+    NSLog(@"%@",friendArray[((senders.view.tag-30000000)/1000)][@"comments"][((senders.view.tag-30000000)%1000)]);
+    NSDictionary *dic = [[NSDictionary alloc]init];
+    dic = friendArray[((senders.view.tag-30000000)/1000)][@"comments"][((senders.view.tag-30000000)%1000)];
+    NSLog(@"%@--%@",dic[@"from_id"],dic[@"from_name"]);
+    //被评论人的id
+    beReviewedID = dic[@"from_id"];
+    //商机id
+    businessID = friendArray[((senders.view.tag-30000000)/1000)][@"id"];
+    if ([dic[@"from_id"] isEqualToString:[BCHTTPRequest getUserId]]) {
+        NSLog(@"自己不能恢复自己");
+    }else
+    {
+        [self showMyTextFieldKeyBoard];
+    }
+}
+
 
 #pragma mark - 点击头像
 - (void)clickUserImageButton:(UIButton *)button
@@ -1272,6 +1314,16 @@
 -(UIColor*)colorForLink:(NSTextCheckingResult*)linkInfo underlineStyle:(int32_t*)underlineStyle
 {
     return [UIColor colorWithRed:86/255.0f green:104/255.0f blue:154/255.0f alpha:1];
+}
+
+#pragma  mark - RTLabelDelegate
+-(void)rtLabel:(id)rtLabel didSelectLinkWithURL:(NSURL *)url
+{
+    MySweepViewController *mySweepVC = [[MySweepViewController alloc]init];
+    mySweepVC.friendIdString = [url absoluteString];
+    mySweepVC.groupIdString = @"0";
+    mySweepVC.groupTypeString = @"4";
+    [self.navigationController pushViewController:mySweepVC animated:YES];
 }
 
 - (void)didReceiveMemoryWarning
