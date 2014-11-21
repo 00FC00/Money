@@ -44,9 +44,9 @@
     
     
     _deleteButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    _deleteButton.frame = CGRectMake(200, 30/2, 40/2, 40/2);
+    _deleteButton.frame = CGRectMake(200 - 20, 0, 100, 40);
     [self.contentView addSubview:_deleteButton];
-
+    
 }
 
 

@@ -38,6 +38,8 @@
 @interface SUNLeftMenuViewController ()
 {
     AdvertisementDetialsViewController *advertisementDetialsVC;
+    
+    NSTimer *timer_advertise;//广告
 }
 
 @end
@@ -275,9 +277,9 @@
 
 - (void)getListData
 {
-    if (menuArray.count > 0) {
-        [menuArray removeAllObjects];
-    }
+//    if (menuArray.count > 0) {
+//        [menuArray removeAllObjects];
+//    }
     [BCHTTPRequest getMyMainMessageWithUsingSuccessBlock:^(BOOL isSuccess, NSDictionary *resultDic) {
         if (isSuccess == YES) {
             
@@ -285,13 +287,29 @@
             NSMutableArray  *mArray = [[NSMutableArray alloc]initWithCapacity:100];
             mArray = resultDic[@"ads_list"];
             allAdArray = [mArray mutableCopy];
+            
+            if (canClickDic) {
+                canClickDic = nil;
+            }
+            if (adBackImageView) {
+                [adBackImageView removeFromSuperview];
+                adBackImageView = nil;
+                
+                [timer_advertise invalidate];
+                
+                timer_advertise  = nil;
+            }
+            
+            
             if (allAdArray.count>0) {
                 
                 canClickDic = allAdArray[0];
                 
                 adNow = 1;
                 adBackImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 320, 182/2)];
-                adBackImageView.backgroundColor = [UIColor colorWithRed:247.0f/255.0f green:247.0f/255.0f blue:247.0f/255.0f alpha:1.0f];;
+                adBackImageView.backgroundColor = [UIColor colorWithRed:247.0f/255.0f green:247.0f/255.0f blue:247.0f/255.0f alpha:1.0f];
+//                adBackImageView.backgroundColor = [UIColor orangeColor];
+                
                 adBackImageView.userInteractionEnabled = YES;
                 [menuTableView.tableHeaderView addSubview:adBackImageView];
                 
@@ -395,15 +413,17 @@
                     [canClickButton addTarget:self action:@selector(clickCanButton) forControlEvents:UIControlEventTouchUpInside];
                     [adBackImageView addSubview:canClickButton];
                     
-                    
-                    [NSTimer scheduledTimerWithTimeInterval:5.0
-                                                     target:self
-                                                   selector:@selector(targetMethod)
-                                                   userInfo:nil
-                                                    repeats:YES];
+                    if (timer_advertise == nil) {
+                        timer_advertise = [NSTimer scheduledTimerWithTimeInterval:5.0
+                                                                           target:self
+                                                                         selector:@selector(targetMethod)
+                                                                         userInfo:nil
+                                                                          repeats:YES];
+                        
+                        [[NSRunLoop currentRunLoop]addTimer:timer_advertise forMode:NSRunLoopCommonModes];
+                    }
                     
                 }
-
                 
             }
             
@@ -581,6 +601,10 @@
             
         }
         
+        if (menuArray.count > 0) {
+            [menuArray removeAllObjects];
+        }
+        
         [menuArray addObjectsFromArray:[[NSUserDefaults standardUserDefaults] objectForKey:@"ModuleMenu"]];
         [menuTableView reloadData];
         
@@ -625,24 +649,6 @@
     NSLog(@"照片");
     
     
-//    if (!my_Unvc) {
-//        
-//        MyPersonCenterViewController *myPersonCenterVC = [[MyPersonCenterViewController alloc]init];
-//        my_Unvc = [[UINavigationController alloc] initWithRootViewController:myPersonCenterVC];
-//    }
-    
-//    [self.mm_drawerController.view addGestureRecognizer:self.mm_drawerController.tap];
-//    [self.mm_drawerController.view addGestureRecognizer:self.mm_drawerController.pan];
-//    [self.mm_drawerController setupGestureRecognizers];
-//    [self.mm_drawerController setCenterViewController:self.navSlideSwitchVC withCloseAnimation:YES completion:^(BOOL finished) {
-//        
-//        if (finished) {
-//            MyPersonCenterViewController *myPersonCenterVC = [[MyPersonCenterViewController alloc]init];
-//            
-//            [self.navSlideSwitchVC pushViewController:myPersonCenterVC animated:NO];
-//        }
-//    }];
-    
     UIViewController * rootController =((AppDelegate*)[UIApplication sharedApplication].delegate).drawerController;
     MyPersonCenterViewController *myPersonCenterVC = [[MyPersonCenterViewController alloc]init];
     
@@ -673,26 +679,20 @@
 	// set the root controller
     DDMenuController * rootController = ((AppDelegate*)[UIApplication sharedApplication].delegate).menuController;
     ///这里是快捷访问
-    if ([menuArray[indexPath.row][@"moduleName"] isEqualToString:@"朋友圈"]) {
+    if ([menuArray[indexPath.row][@"moduleName"] isEqualToString:@"快捷访问"]) {
         
         if (!quickAccessNav) {
             QuickAccessViewController *quickAccessViewController = [[QuickAccessViewController alloc] init];
             quickAccessNav = [[UINavigationController alloc] initWithRootViewController:quickAccessViewController];
         }
-        [self.mm_drawerController.view addGestureRecognizer:self.mm_drawerController.tap];
-        [self.mm_drawerController.view addGestureRecognizer:self.mm_drawerController.pan];
-        [self.mm_drawerController setupGestureRecognizers];
-        [self.mm_drawerController setCenterViewController:quickAccessNav withCloseAnimation:YES completion:nil];
+        [self setCenterviewController:quickAccessNav];
         
     }else if ([menuArray[indexPath.row][@"moduleName"] isEqualToString:@"我的部落"]) {
         if (!MyFaceBookGroupNav) {
             MyFaceBookGroupViewController *myFaceBookGroupViewController = [[MyFaceBookGroupViewController alloc] init];
             MyFaceBookGroupNav = [[UINavigationController alloc] initWithRootViewController:myFaceBookGroupViewController];
         }
-        [self.mm_drawerController.view addGestureRecognizer:self.mm_drawerController.tap];
-        [self.mm_drawerController.view addGestureRecognizer:self.mm_drawerController.pan];
-        [self.mm_drawerController setupGestureRecognizers];
-        [self.mm_drawerController setCenterViewController:MyFaceBookGroupNav withCloseAnimation:YES completion:nil];
+        [self setCenterviewController:MyFaceBookGroupNav];
         
         
     }else if ([menuArray[indexPath.row][@"moduleName"] isEqualToString:@"聊天"]) {
@@ -701,10 +701,7 @@
             ChatViewController *chatViewController = [[ChatViewController alloc] init];
             ChatViewNav = [[UINavigationController alloc] initWithRootViewController:chatViewController];
         }
-        [self.mm_drawerController.view addGestureRecognizer:self.mm_drawerController.tap];
-        [self.mm_drawerController.view addGestureRecognizer:self.mm_drawerController.pan];
-        [self.mm_drawerController setupGestureRecognizers];
-        [self.mm_drawerController setCenterViewController:ChatViewNav withCloseAnimation:YES completion:nil];
+        [self setCenterviewController:ChatViewNav];
         
     }else if ([menuArray[indexPath.row][@"moduleName"] isEqualToString:@"联系人"]) {
         
@@ -712,86 +709,58 @@
             ContactPeopleViewController *contactPeopleViewController = [[ContactPeopleViewController alloc] init];
             ContactPeopleNav = [[UINavigationController alloc] initWithRootViewController:contactPeopleViewController];
         }
-        [self.mm_drawerController.view addGestureRecognizer:self.mm_drawerController.tap];
-        [self.mm_drawerController.view addGestureRecognizer:self.mm_drawerController.pan];
-        [self.mm_drawerController setupGestureRecognizers];
-        [self.mm_drawerController setCenterViewController:ContactPeopleNav withCloseAnimation:YES completion:nil];
+        [self setCenterviewController:ContactPeopleNav];
         
         
-    }else if ([menuArray[indexPath.row][@"moduleName"] isEqualToString:@"快捷访问"]) ///这里是朋友圈
+    }else if ([menuArray[indexPath.row][@"moduleName"] isEqualToString:@"朋友圈"]) ///这里是朋友圈
     {
         if (!FriendsCircleNav) {
             FriendsCircleViewController *friendsCircleViewController = [[FriendsCircleViewController alloc] init];
             FriendsCircleNav = [[UINavigationController alloc] initWithRootViewController:friendsCircleViewController];
         }
-        [self.mm_drawerController.view addGestureRecognizer:self.mm_drawerController.tap];
-        [self.mm_drawerController.view addGestureRecognizer:self.mm_drawerController.pan];
-        [self.mm_drawerController setupGestureRecognizers];
-        [self.mm_drawerController setCenterViewController:FriendsCircleNav withCloseAnimation:YES completion:nil];
+        [self setCenterviewController:FriendsCircleNav];
         
     }else if ([menuArray[indexPath.row][@"moduleName"] isEqualToString:@"部落群"]) {
         if (!FaceBookGroupNav) {
             FaceBookGroupViewController *faceBookGroupViewController = [[FaceBookGroupViewController alloc] init];
             FaceBookGroupNav = [[UINavigationController alloc] initWithRootViewController:faceBookGroupViewController];
         }
-        [self.mm_drawerController.view addGestureRecognizer:self.mm_drawerController.tap];
-        [self.mm_drawerController.view addGestureRecognizer:self.mm_drawerController.pan];
-        [self.mm_drawerController setupGestureRecognizers];
-        [self.mm_drawerController setCenterViewController:FaceBookGroupNav withCloseAnimation:YES completion:nil];
+        [self setCenterviewController:FaceBookGroupNav];
         
     }else if ([menuArray[indexPath.row][@"moduleName"] isEqualToString:@"部落墙"]) {
         if (!BusinessWallNav) {
             BusinessWallViewController *businessWallViewController = [[BusinessWallViewController alloc] init];
             BusinessWallNav = [[UINavigationController alloc] initWithRootViewController:businessWallViewController];
         }
-        [self.mm_drawerController.view addGestureRecognizer:self.mm_drawerController.tap];
-        [self.mm_drawerController.view addGestureRecognizer:self.mm_drawerController.pan];
-        [self.mm_drawerController setupGestureRecognizers];
-        [self.mm_drawerController setCenterViewController:BusinessWallNav withCloseAnimation:YES completion:nil];
+        [self setCenterviewController:BusinessWallNav];
         
     }else if ([menuArray[indexPath.row][@"moduleName"] isEqualToString:@"部落资讯"]) {
         if (!InformationMainNav) {
             InformationMainViewController *informationViewController = [[InformationMainViewController alloc] init];
             InformationMainNav = [[UINavigationController alloc] initWithRootViewController:informationViewController];
         }
-        [self.mm_drawerController.view addGestureRecognizer:self.mm_drawerController.tap];
-        [self.mm_drawerController.view addGestureRecognizer:self.mm_drawerController.pan];
-        [self.mm_drawerController setupGestureRecognizers];
-        [self.mm_drawerController setCenterViewController:InformationMainNav withCloseAnimation:YES completion:nil];
+        [self setCenterviewController:InformationMainNav];
         
     }else if ([menuArray[indexPath.row][@"moduleName"] isEqualToString:@"部落活动"]) {
         if (!MyActivityNav) {
             MyActivityViewController *myActivityViewController = [[MyActivityViewController alloc] init];
             MyActivityNav = [[UINavigationController alloc] initWithRootViewController:myActivityViewController];
         }
-        [self.mm_drawerController.view addGestureRecognizer:self.mm_drawerController.tap];
-        [self.mm_drawerController.view addGestureRecognizer:self.mm_drawerController.pan];
-        [self.mm_drawerController setupGestureRecognizers];
-        [self.mm_drawerController setCenterViewController:MyActivityNav withCloseAnimation:YES completion:nil];
+        [self setCenterviewController:MyActivityNav];
         
     }else if ([menuArray[indexPath.row][@"moduleName"] isEqualToString:@"同乡校友"]) {
         if (!TownsmanNav) {
             TownsmanViewController *townsmanViewController = [[TownsmanViewController alloc] init];
             TownsmanNav = [[UINavigationController alloc] initWithRootViewController:townsmanViewController];
         }
-        [self.mm_drawerController.view addGestureRecognizer:self.mm_drawerController.tap];
-        [self.mm_drawerController.view addGestureRecognizer:self.mm_drawerController.pan];
-        [self.mm_drawerController setupGestureRecognizers];
-        [self.mm_drawerController setCenterViewController:TownsmanNav withCloseAnimation:YES completion:nil];
+        [self setCenterviewController:TownsmanNav];
         
     }else if ([menuArray[indexPath.row][@"moduleName"] isEqualToString:@"部落消息"]) {
         if (!MessageNav) {
             MessageViewController *messageViewController = [[MessageViewController alloc] init];
             MessageNav = [[UINavigationController alloc] initWithRootViewController:messageViewController];
         }
-        [self.mm_drawerController.view addGestureRecognizer:self.mm_drawerController.tap];
-        [self.mm_drawerController.view addGestureRecognizer:self.mm_drawerController.pan];
-        [self.mm_drawerController setupGestureRecognizers];
-        [self.mm_drawerController setCenterViewController:MessageNav withCloseAnimation:YES completion:nil];
-        
-        
-        //[self.mm_drawerController.view removeGestureRecognizer:self.mm_drawerController.tap];
-        //[self.mm_drawerController.view removeGestureRecognizer:self.mm_drawerController.pan];
+        [self setCenterviewController:MessageNav];
         
         
     }else if ([menuArray[indexPath.row][@"moduleName"] isEqualToString:@"升级为VIP"]) {
@@ -800,12 +769,18 @@
             upgradeVIPViewController.isMenu = @"yes";
             UpgradeVIPNav = [[UINavigationController alloc] initWithRootViewController:upgradeVIPViewController];
         }
-        [self.mm_drawerController.view addGestureRecognizer:self.mm_drawerController.tap];
-        [self.mm_drawerController.view addGestureRecognizer:self.mm_drawerController.pan];
-        [self.mm_drawerController setupGestureRecognizers];
-        [self.mm_drawerController setCenterViewController:UpgradeVIPNav withCloseAnimation:YES completion:nil];
+        
+        [self setCenterviewController:UpgradeVIPNav];
     }
     
+}
+
+- (void)setCenterviewController:(UIViewController *)viewController
+{
+    [self.mm_drawerController.view addGestureRecognizer:self.mm_drawerController.tap];
+    [self.mm_drawerController.view addGestureRecognizer:self.mm_drawerController.pan];
+    [self.mm_drawerController setupGestureRecognizers];
+    [self.mm_drawerController setCenterViewController:viewController withCloseAnimation:YES completion:nil];
 }
 
 //改变行的高度
@@ -841,17 +816,17 @@
     
     if (isP == YES) {
         
-        [cell.deleteButton setBackgroundImage:[UIImage imageNamed:@"shanchu@2x"] forState:UIControlStateNormal];
+        [cell.deleteButton setImage:[UIImage imageNamed:@"shanchu"] forState:UIControlStateNormal];
         cell.deleteButton.hidden = YES;
         
     }else
     {
         if (indexPath.row == menuArray.count-1) {
-            [cell.deleteButton setBackgroundImage:[UIImage imageNamed:@""] forState:UIControlStateNormal];
+            [cell.deleteButton setImage:[UIImage imageNamed:@""] forState:UIControlStateNormal];
             cell.deleteButton.hidden = YES;
         }else
         {
-            [cell.deleteButton setBackgroundImage:[UIImage imageNamed:@"shanchu@2x"] forState:UIControlStateNormal];
+            [cell.deleteButton setImage:[UIImage imageNamed:@"shanchu"] forState:UIControlStateNormal];
             cell.deleteButton.hidden = NO;
             cell.deleteButton.tag = indexPath.row;
             [cell.deleteButton addTarget:self action:@selector(clickDeleteButton:) forControlEvents:UIControlEventTouchUpInside];
