@@ -810,7 +810,15 @@
         
     }
     
-    cell.titleLabel.text = menuArray[indexPath.row][@"moduleName"];
+    NSString *title = menuArray[indexPath.row][@"moduleName"];
+    
+    if ([title isEqualToString:@"升级为VIP"]) {
+        
+        title = @"高级用户资格";
+    }
+    
+    cell.titleLabel.text = title;
+    
     [cell.markImageView setImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@",menuArray[indexPath.row][@"moduleImage"]]]];
     [cell.xianImageView setImage:[UIImage imageNamed:@"shouyecellxian@2x"]];
     

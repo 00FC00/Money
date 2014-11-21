@@ -219,7 +219,14 @@
     }
     NSLog(@"%@",moduleArray);
     
-    cell.titleLabel.text = moduleArray[indexPath.row][@"moduleName"];
+    NSString *title = moduleArray[indexPath.row][@"moduleName"];;
+    
+    if ([title isEqualToString:@"升级为VIP"]) {
+        
+        title = @"高级用户资格";
+    }
+    
+    cell.titleLabel.text = title;
     cell.headImageView.image = [UIImage imageNamed:[NSString stringWithFormat:@"%@",moduleArray[indexPath.row][@"moduleImage"]]];
     cell.lineImageView.image = [UIImage imageNamed:@"xiahuaxian@2x"];
     
