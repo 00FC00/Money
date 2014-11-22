@@ -171,6 +171,7 @@
 
 - (void)targetMethod
 {
+    //asdnaksjdkajsdk
     
     // NSLog(@"all---%@",allAdArray);
     if (adImageView1.frame.origin.y == 0) {
