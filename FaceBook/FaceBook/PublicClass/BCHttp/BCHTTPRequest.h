@@ -368,6 +368,10 @@
 
 
 #pragma mark - 资讯===6
+
+//点赞
++ (void)praiseInfomationWithInfoID:(NSString *)infoid WithStatus:(NSString *)status usingSuccessBlock:(void (^)(BOOL isSuccess,NSDictionary*resultDic))successBlock;
+
 //所有资讯大分类列表
 + (void)getZXMainListWithUsingSuccessBlock:(void (^)(BOOL isSuccess,NSDictionary*resultDic))successBlock;
 

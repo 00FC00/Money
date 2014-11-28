@@ -21,9 +21,11 @@
 #import "UIViewController+MMDrawerController.h"
 #import "InformationCommentViewController.h"
 
+#import "InfomationModel.h"
+
 @interface InformationMainViewController ()
 {
-    
+    NSMutableArray *modelsArr;
 }
 @end
 
@@ -37,6 +39,7 @@
         // Custom initialization
         listArray = [[NSArray alloc] init];
         inforArray = [[NSMutableArray alloc]initWithCapacity:100];
+        modelsArr = [NSMutableArray array];
         //typeStrId = [[NSString alloc] init];
     }
     return self;
@@ -75,13 +78,22 @@
     
     //分类按钮
     newsClassButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    newsClassButton.frame = CGRectMake(524/2, 10/2, 100/2, 60/2);
+    newsClassButton.frame = CGRectMake(524/2, 10/2 + 3, 72 / 2, 39 / 2);
     [newsClassButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [newsClassButton setTitle:@"分类" forState:UIControlStateNormal];
     newsClassButton.titleLabel.font = [UIFont systemFontOfSize:15];
     [newsClassButton setBackgroundImage:[UIImage imageNamed:@"zixunfenleianniu@2x"] forState:UIControlStateNormal];
-    [newsClassButton addTarget:self action:@selector(clickNewsClassButton) forControlEvents:UIControlEventTouchUpInside];
+    
+    
+    UIButton *realArea_btn = [UIButton buttonWithType:UIButtonTypeCustom];
+    realArea_btn.frame = CGRectMake(0, 0, 100, 35);
+    realArea_btn.backgroundColor = [UIColor clearColor];
+    
+    [realArea_btn addTarget:self action:@selector(clickNewsClassButton) forControlEvents:UIControlEventTouchUpInside];
+    
+    [self.view addSubview:realArea_btn];
     [self.view addSubview:newsClassButton];
+    realArea_btn.center = CGPointMake(newsClassButton.center.x, newsClassButton.center.y);
     
    
     //下拉框
@@ -156,9 +168,18 @@
             if ([resultDic[@"list"] count] > 0) {
                 if (num == 1) {
                     inforArray = [[NSMutableArray alloc] initWithCapacity:100];
+                    modelsArr = [[NSMutableArray alloc]initWithCapacity:100];
                 }
                 
                 [inforArray addObjectsFromArray:resultDic[@"list"]];
+                
+                NSArray *list = resultDic[@"list"];
+                
+                for (NSDictionary *aDic in list) {
+                    InfomationModel *aModel = [[InfomationModel alloc]initWithDictionary:aDic];
+                    
+                    [modelsArr addObject:aModel];
+                }
                 
             }
             
@@ -211,13 +232,13 @@
 - (CGFloat )tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (tableView.tag == 7000) {
-        return 40;
+        return 40 + 40;
     }else if (tableView.tag == 9000)
     {
         //242/2+37+number*80/2
         NSMutableArray *numArray = [[NSMutableArray alloc] initWithCapacity:100];
         numArray = inforArray[indexPath.row][@"comments"];
-        return 242/2+37+40*[numArray count]+6;
+        return 242/2+37+40*[numArray count]+6 + 40;
     }
     return NO;
 }
@@ -258,7 +279,7 @@
         }
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.backgroundColor = [UIColor clearColor];
-        cell.cellBackImageView.frame = CGRectMake(15/2, 0, 610/2, 242/2+37+40*[inforArray[indexPath.row][@"comments"] count]);
+        cell.cellBackImageView.frame = CGRectMake(0, 0, DEVICE_FRAME_WIDTH, 242/2+37+40*[inforArray[indexPath.row][@"comments"] count] + 40);
         //CGRectMake(12/2, 40/2, 572/2, 80/2)
         
         cell.pictureImageView.frame = CGRectMake(0, 0, cell.cellBackImageView.frame.size.width, 242/2);
@@ -267,6 +288,7 @@
         cell.titleBackImageView.frame = CGRectMake(0, 182/2, cell.pictureImageView.frame.size.width, 60/2);
 //        cell.titleLabel.numberOfLines = 0;
         NSString *str1 = inforArray[indexPath.row][@"title"];
+        
 //        CGSize size1;
 //        //***********ios7的方法
 //        if (IS_IOS_7)
@@ -281,11 +303,25 @@
         cell.titleLabel.frame = CGRectMake(10, 16/2, cell.titleBackImageView.frame.size.width-20, 36/2);
         cell.titleLabel.text = str1;
         
+        [cell.praiseImageView setImage:[UIImage imageNamed:@"praise_icon"]];
+        [cell.markImageView setImage:[UIImage imageNamed:@"comment_icon"]];
         
-        [cell.markImageView setImage:[UIImage imageNamed:@"pinglunmarkbiao@2x"]];
-        cell.numberLabel.text = [NSString stringWithFormat:@"评论(%@)",inforArray[indexPath.row][@"comments_count"]];
+        InfomationModel *aModel = [modelsArr objectAtIndex:indexPath.row];
+                
+        cell.numberLabel.text = [NSString stringWithFormat:@"评论(%@)",aModel.comments_count];
+        
+        cell.praiseLabel.text = [NSString stringWithFormat:@"(%@)",aModel.praiseNums];
         
         cell.commentBackImageView.frame =CGRectMake(0, 316/2, 610/2, 40*[inforArray[indexPath.row][@"comments"] count]);
+        
+        NSString *praise = aModel.isPraise;
+        
+        int isPraise = [praise intValue];
+        
+        cell.zan_btn.selected = (isPraise == 1) ? YES :NO;
+        cell.zan_btn.tag = 100 + indexPath.row;
+        
+        [cell.zan_btn addTarget:self action:@selector(clickToPraise:) forControlEvents:UIControlEventTouchUpInside];
         
         for (UIView * sview in cell.commentBackImageView.subviews) {
            // if (sview.tag >= 10000000) {
@@ -348,6 +384,7 @@
         cell.commentButton.frame = CGRectMake(0, 316/2, 610/2, 40*[inforArray[indexPath.row][@"comments"] count]);
         cell.commentButton.tag = 40000+indexPath.row;
          [cell.commentButton addTarget:self action:@selector(clickCommentButton:) forControlEvents:UIControlEventTouchUpInside];
+        cell.commentActionBackView.top = cell.commentButton.bottom;
         
         return cell;
 
@@ -385,6 +422,34 @@
     [self.navigationController pushViewController:informationDetailViewController animated:YES];
 
 }
+
+#pragma mark - 点赞
+
+- (void)clickToPraise:(UIButton *)sender
+{
+    int tag = sender.tag - 100;
+    
+    __weak typeof(sender)weakSender = sender;
+    
+    InfomationModel *aModel = [modelsArr objectAtIndex:tag];
+    
+    [BCHTTPRequest praiseInfomationWithInfoID:aModel.id WithStatus:nil usingSuccessBlock:^(BOOL isSuccess, NSDictionary *resultDic) {
+        
+        int oper = [resultDic[@"oper"]intValue];
+        if (oper == 1) {
+            
+            NSLog(@"赞成功");
+            weakSender.selected = YES;
+            aModel.praiseNums = [NSString stringWithFormat:@"%d",[aModel.praiseNums intValue] + 1];
+            aModel.isPraise = @"1";
+            
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:tag inSection:0];
+            [informationMainTableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+        }
+    }];
+}
+
+
 #pragma mark - 评论页面
 - (void)clickCommentButton:(UIButton *)mySender
 {

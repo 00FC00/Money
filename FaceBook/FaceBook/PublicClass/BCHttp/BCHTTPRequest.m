@@ -2790,7 +2790,33 @@
 
 
 
-#pragma mark - 资讯
+#pragma mark - 部落资讯
+
+//点赞或者取消赞△
++ (void)praiseInfomationWithInfoID:(NSString *)infoid WithStatus:(NSString *)status usingSuccessBlock:(void (^)(BOOL isSuccess,NSDictionary*resultDic))successBlock
+{
+    NSString *stringURL = [NSString stringWithFormat:@"%@index.php?r=default/informations/setPraise&id=%@&token=%@&aid=%@",kMainUrlString,[self getUserId],[self getUserToken],infoid];
+    NSLog(@"部落资讯点赞%@",stringURL);
+    [self getDictionaryWithStringURL:stringURL usingSuccessBlock:^(NSDictionary *resultDictionary) {
+
+        NSLog(@"部落资讯点赞%@",resultDictionary);
+        
+        if ([resultDictionary[@"state"] integerValue] == 1) {
+            
+            successBlock(YES,resultDictionary);
+        }else
+        {
+            [[DMCAlertCenter defaultCenter] postAlertWithMessage:resultDictionary[@"message"]];
+            successBlock(NO,nil);
+        }
+        
+        
+    } andFailureBlock:^(NSError *resultError) {
+        [[DMCAlertCenter defaultCenter] postAlertWithMessage:@"网络未连接"];
+    }];
+    
+}
+
 //所有资讯大分类列表
 + (void)getZXMainListWithUsingSuccessBlock:(void (^)(BOOL isSuccess,NSDictionary*resultDic))successBlock
 {

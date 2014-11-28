@@ -23,10 +23,21 @@
 @property (strong, nonatomic) UIImageView *markImageView;
 //评论数量
 @property (strong, nonatomic) UILabel *numberLabel;
-//评论背景
+
+//赞图标
+@property (strong, nonatomic) UIImageView *praiseImageView;
+//赞 数量
+@property (strong, nonatomic) UILabel *praiseLabel;
+
+//评论数量背景
 @property (strong, nonatomic) UIImageView *commentBackImageView;
 
 @property (strong, nonatomic) UIButton *moreButton;//详情
 @property (strong, nonatomic) UIButton *commentButton;//评论
+
+//评论触发区域背景
+
+@property (strong, nonatomic) UIImageView *commentActionBackView;
+@property (strong, nonatomic) UIButton *zan_btn;
 
 @end

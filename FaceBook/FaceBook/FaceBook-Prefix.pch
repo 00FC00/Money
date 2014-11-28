@@ -28,6 +28,10 @@
 //#define kMainUrlString @"http://lianpu.bloveambition.com/"
 #define IS_IOS_7  [[[UIDevice currentDevice]systemVersion]floatValue]>=7.0
 
+#define DEVICE_FRAME [UIScreen mainScreen].applicationFrame //屏幕大小
+#define DEVICE_FRAME_WIDTH DEVICE_FRAME.size.width
+#define DEVICE_FRAME_HEIGHT DEVICE_FRAME.size.height
+
 #define IdentityNoti @"IdentityNoti"
 #define DepartmentNoti @"DepartmentNoti"
 #define kHarpyAppID                 @"934251737"
